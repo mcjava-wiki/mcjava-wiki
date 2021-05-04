@@ -1,0 +1,105 @@
+---
+title: Default Assets
+section: Basics
+slug: /docs/basics/default-assets
+order: 1
+---
+
+# Default Assets
+
+The default assets are an excellent resource for understanding the general structure of resource pack. Note that these assets should be used for reference only, and never distributed with third party packs, as Mojang holds the rights to the default assets.
+
+## Extracting the Main Assets
+
+The process of extracting the default assets varies by platform. In general, the process consists of navigating to your minecraft folder, navigating to the versions folder, selecting your version of choice, unpacking the jar file of your chosen version, and placing the included assets folder in a safe location.
+
+### Windows
+
+1. Press `Win + R` and enter the following: `%appdata%\.minecraft\versions`
+2. Select the folder of the version to to be extracted
+3. Make a copy of the jar file, and unzip with a third-party unpacking application, such as WinRar, if available
+4. If already unzipped proceed to step 8; else, change the extension to `.zip`
+5. Select the 'View' tab in File Explorer and ensure 'File name extensions' is checked and shown
+6. Right click the enclosing version folder and select 'Open PowerShell window here'
+7. From the PowerShell prompt, enter `Expand-Archive [FILE_NAME].zip`
+8. Navigate to the assets folder from the expanded archive and place it in a safe location
+
+### MacOS
+
+1. From finder, press `Cmd + Shift + G`
+2. Enter the following path into the prompt: `~/Library/Application Support/minecraft/versions`
+3. Select the folder of the version to to be extracted
+4. Right click (or `Ctrl + Click`) the assets folder and select `Services > New Terminal at Folder`
+5. Run the following from terminal: `unzip 1.15.jar 'assets/**/*'`
+6. Navigate to the assets folder from the expanded archive and place it in a safe location
+
+### Linux
+
+Perform the following from the command line:
+```bash
+cd ~/.minecraft/versions/1.16.5
+unzip 1.15.jar 'assets/**/*'
+mv assets [TARGET-DIRECTORY]
+```
+
+## Extracting the Hashed Assets
+
+Not all assets are contained in the assets folder found in the game jar file, most notably sounds. To extract these assets, one must use the correct index for the desired version from `./assets/indexes` of the  Minecraft folder. This process would be extremely tedious to perform manually, so it must be automated. The guide below describes the process of doing so with NodeJS.
+
+### NodeJS
+
+First, ensure NodeJS is installed. If not, simply visit the [NodeJS](https://nodejs.org/en/) website and download the proper version for your operating system.
+
+### Location
+
+Navigate to the correct location for your operating system:
+- Windows: `%appdata%\.minecraft\assets`
+- MacOS: `~/Library/Application Support/minecraft/versions`
+- Linux: `~/.minecraft/assets`
+
+### Script
+
+Create a script in the assets folder called `extract-assets.js`. Use the following contents, being sure to changes the indexes path to the JSON file for the desired major version:
+
+```js highlights={4} title={./minecraft/assets/extract-assets.js}
+// ensure fs-extra is installed in folder w/ npm i fs-extra
+var fs = require('fs-extra')
+// select the JSON index of your chosen version
+var objects = require('./indexes/1.17.json').objects
+
+for (var filePath in objects) {
+  var copyPath = './target/' + filePath.replace('minecraft/','assets/minecraft/').replace('realms/','assets/realms/')
+  var hash = objects[filePath].hash
+  var objectPath = './objects/' + hash.substring(0, 2) + '/' + hash
+  console.log(objectPath, '->', copyPath)
+  fs.copySync(objectPath, copyPath)
+}
+```
+
+### Extraction
+
+Next, open a terminal window and ensure your current directory is the assets folder:
+- Windows: Right click the assets folder and select 'Open PowerShell window here'
+- MacOS: Right click (or `Ctrl + Click`) the assets folder and select `Services > New Terminal at Folder`
+- Linux: `cd ~/.minecraft/assets`
+
+From your terminal window, install the required fs-extra npm package with:
+```bash
+npm i fs-extra
+```
+
+Call the script with:
+```bash
+node extract-assets.js
+```
+
+The assets will then be extracted to a folder names `./target`. You may then place this in a safe place or merge it with your extracted main assets.
+
+## Key Takeaways
+
+- The default assets provide a template for how to structure your resource pack
+- You should never distribute the default assets in your own packs
+- Extracting the default assets is accomplished by:
+  - Navigating to the versions folder of the minecraft folder
+  - Selecting the desired version folder and unpacking the enclosed jar file to find the assets folder
+- Certain assets, such as sounds, are not included in the game jar, and must be extracted programmatically uses the version index file

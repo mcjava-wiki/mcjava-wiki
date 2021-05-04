@@ -1,0 +1,297 @@
+---
+title: Contributing
+section: About
+slug: /docs/about/contributing
+order: 3
+---
+
+# Contributing
+
+Contributions to this wiki are welcomed and appreciated. If you are generally experienced with [Markdown](https://www.markdownguide.org/)/[MDX](https://mdxjs.com/) and [GitHub](https://github.com/), contributing is as simple as forking the wiki repository and creating a pull request. 
+
+This guide still may be helpful for experienced users, as it will give you an idea of the specific features of [Gatsby](https://www.gatsbyjs.com/docs/) this [custom theme](https://smooth-doc.com/).
+
+If unfamiliar with this process, fear not! This guide will walk you through the contribution process in a step-by-step manner. If you still have questions, feel free to join the [Discord](https://discord.com/invite/rqsKmmh89J) for assistance. If completely lost, you may also submit articles to `Kastle#4801` via Discord.
+
+## GitHub Desktop
+
+Though it is possible to use GitHub's web editor, it is reccomended that you download [GitHub Desktop](https://desktop.github.com/) if you plan to contribute on an ongoing basis. The linked landing page should provide a suitable download for your system. If you do not yet have a GitHub account, GitHub Desktop will prompt you to create one.
+
+### Forking the Repository
+
+1. From the `File` menu, select `Cline Repository...`
+2. Select `URL` and enter `https://github.com/Kas-tle/mcjava-wiki`
+3. Chose the desired location of the repository on your system with `Local Path`
+4. Click `Clone`
+5. From the `Repository` menu, select `Push`
+6. Click `Fork This Repository`
+7. Choose `To contribute to the parent project` and click `Continue`
+
+### Editing the Repository
+
+The files of the repository may now be editted from the location at which you cloned the repository in the previous instructions. Before editting, it is recommended that you create a new branch for each major contribution if you plan to contribute frequently. To create a new branch:
+
+1. From the `Branch` menu, select `New Branch...`
+2. Enter a name for the branch that describes your intended contribution (e.g. animated-textures)
+3. Click `Create Branch`
+
+To switch between branches, you may use the `Current Branch` tab in the top right of the window. When switching branches, GitHub Desktop will pull the files for the given branch from GitHub and update your repository folder automatically.
+
+It is reccomended, though also not required, that you utilize a text editing application with syntax checking and highlighting. [Visual Studio Code](https://code.visualstudio.com/) and [Atom](https://atom.io/) are both excellent options availible on all major operating systems.
+
+### Committing Changes
+
+Changes are not tracked by the repository until they are committed. GitHub Desktop will show you any files you have changed in the `Changes` tab. Once you are satisfied with your changes, you may commit them through the GitHub Desktop GUI. It is good practice to give a reasonable summary of each commit, describing what is being changed and why. This will make the process of reviewing your pull request much smoother.
+
+If you are not satisfied with any changes to files, you may discard those changes without committing by highlighting them, right clicking, and selecting `Discard Changes`. This will revert the changes to the last commit.
+
+### Pushing Changes
+
+After making committing changes, pushing your changes to GitHub is as simple as selecting `Push` from the `Repository` menu. Generally, it is a good idea to push frequently, as this will ensure your changes are also stored on GitHub.
+
+### Opening a Pull Request
+
+Once you are completely satisfied with your article and have pushed all needed changes, you may open a pull request for review. To create a pull request:
+
+1. From the `Branch` menu, select `Create Pull Request`
+2. After your web browser opens, login to GitHub if needed, then click `Create pull request`
+3. Use the comment box to summarize the changes made by your pull request
+4. Click `Create Pull Request`
+
+After opening your PR, your proposed changes will be reviewed by a wiki administrator. They will either requst any needed changes, or if no changes are needed, merge your proposed changes into the project.
+
+## Live Previewing Changes
+
+To build the site and preview locally, you'll need [NodeJS](https://nodejs.org/en/).
+
+```bash highlights={3}
+git clone https://github.com/Kas-tle/mcjava-wiki
+cd mcjava-wiki
+npm install #--legacy-peer-deps
+npm run develop
+```
+
+Changes can be live previewed with the above commands. Uncomment `--legacy-peer-deps` if running npm 7. If you are not able to preview your changes, do not stress. A preview will be automatically generated when you open your pull request.
+
+## Considerations
+
+This section details considerations specific to this project based on the tools that we utilize, as well as custom features that we have added.
+
+### File Organization
+
+The pages of this wiki are stored in the path `/pages/docs` of the repository. In here, you will find a folder for each section of the wiki. Please keep any contributions to the correct section. If you are unsure of the section under which a contribution fits, please ask in the Discord.
+
+If you feel it needed to add a new section for your contribution, you may do so by adding to the `sections` array in `gatsby-config.js`. This will register the new section to the navigation bar. You may then create a new directory in `/pages/docs`.
+
+### Page Header
+
+All pages must have a page header for Gatsby to register them. The page header consists of the following information:
+
+```mdx title={/pages/docs/about/contributing.mdx}
+---
+title: Contributing
+section: About
+slug: /docs/about/contributing
+order: 3
+---
+```
+
+- `title` defines the title of the page that appears in the navigation bar
+- `section` defines the section under which the page will appear
+- `slug` defines the URL path of the page (e.g. `/docs/about/contributing` will produce the URL `https://wiki.mcjava.dev/docs/about/contributing`)
+- `order` defines the position of the page in its respective section of the navigation bar, with `1` being first, and higher numbers being after
+
+### Markdown Syntax
+
+All pages are created with MDX files. MDX is a subset of Markdown. If needed, it is also acceptable to right in plain HTML, which Gatsby should parse correctly in most cases.
+
+MDX uses markdown syntax. A complete style guide for markdown is availible [here](https://www.markdownguide.org/basic-syntax/). Here is a brief visual summary:
+
+***
+
+```md title={Headings}
+# Heading Level 1
+
+This heading should only be used as the title of the page
+
+## Heading Level 2
+
+This heading should be used for major sections
+
+### Heading Level 3
+
+This heading should be used for subsections. 
+Only heading levels 2 and 3 will be displayed on the right sidebar.
+Headings go all the way to level 6 by adding more hashtags.
+```
+
+<h1>Heading Level 1</h1>
+
+This heading should only be used as the title of the page
+
+<h2>Heading Level 1</h2>
+
+This heading should be used for major sections
+
+<h3>Heading Level 1</h3>
+
+This heading should be used for subsections. 
+Only heading levels 2 and 3 will be displayed on the right sidebar.
+Headings go all the way to level 6 by adding more hashtags.
+
+***
+
+```md title={Bolding and Italics}
+**Bold Text**
+
+*Italic Text*
+
+***Bold and Italic Text***
+```
+
+**Bold Text**
+
+*Italic Text*
+
+***Bold and Italic Text***
+
+***
+
+```md title={Block Quotes}
+> This is a block quote
+>
+> and more
+```
+
+> This is a block quote
+>
+> and more
+
+***
+
+```md title={Lists}
+1. First item
+2. Second item
+3. Third item
+    1. Indented item
+    2. Indented item
+4. Fourth item 
+
+- First item
+- Second item
+- Third item
+    - Indented item
+    - Indented item
+- Fourth item
+```
+
+1. First item
+2. Second item
+3. Third item
+    1. Indented item
+    2. Indented item
+4. Fourth item 
+
+- First item
+- Second item
+- Third item
+    - Indented item
+    - Indented item
+- Fourth item
+
+***
+
+```md title={Images}
+![Tux, the Linux mascot](./img/tux.png)
+```
+
+Note that we specify the path for this image relative to the mdx file of the page:
+
+![Tux, the Linux mascot](./img/tux.png)
+
+***
+
+```md title={Lines}
+There will be an extra line under this
+***
+```
+
+There will be an extra line under this
+***
+
+***
+
+```md title={Links}
+My favorite browser is:
+[Firefox Developer Edition](https://duckduckgo.com "The best browser! (and this hover tip is optional)").
+
+<https://wiki.mcjava.dev/>
+
+<hello@gmail.com>
+```
+
+My favorite browser is:
+[Firefox Developer Edition](https://duckduckgo.com "The best browser! (and this hover tip is optional)").
+
+<https://wiki.mcjava.dev/>
+
+<hello@gmail.com>
+
+***
+
+```md title={Inline Code}
+`Put barticks around inline code`
+```
+
+`Put barticks around inline code`
+
+***
+
+### Code Blocks
+
+Code blocks are one of the most common components of the wiki. Consequently, an effort was made to add useful features to code blocks. The example below shows how to utilize syntax highlighting and codeblock titles.
+
+```text
+`​``json title={/path/somefile.json} highlights={2,4-6}
+{
+    "hello": "world",
+    "some_nums": [
+        1,
+        2,
+        3
+    ]
+}
+`​``
+```
+
+The tripple bartick should be followed by the language in which you are writing. Most commonly, this will be `json`. You may then optionally add a title using the syntax `title={somefile.json}`. Ensure this is seperated from the langauge by a space. You may also define lines to highlight with the syntax `highlights={1,2-4}`. Here, commas seperate lines and ranges, and a range can be specified with a hyphen.
+
+The code block would then render as:
+
+```json title={/path/somefile.json} highlights={2,4-6}
+{
+    "hello": "world",
+    "some_nums": [
+        1,
+        2,
+        3
+    ]
+}
+```
+
+## Key Takeaways
+
+- Contributions are always welcome, and are critical to the success and quality of the wiki
+- The general process of contributing is:
+  - Forking the repository
+  - Making, committing, and pushing changes
+  - Opening a pull request
+- Frequent contributors should install [GitHub Desktop](https://desktop.github.com/)
+- The wiki is powered by [Gatsby](https://www.gatsbyjs.com/), and can be previewed locally with npm, provided [NodeJS](https://nodejs.org/en/) is installed
+- Pages on the wiki are found under the path `/pages/docs` of the repository
+- All pages must have a proper header specifying `title`, `section`, `slug`, and `order`
+- Pages are written in MDX, which uses [markdown syntax](https://www.markdownguide.org/basic-syntax/)
+- Code blocks have special features like titles, langauage syntax highlighting, and line highlighting
+  - Define the language with no spaces after the tripple bartick (e.g. `json`)
+  - Define a code block title with the syntax `title={sometitle.json}`, seperated from the language by a space
+  - Define line highlighting with the syntax `highlights={1,3-4}`, seperated from the language by a space

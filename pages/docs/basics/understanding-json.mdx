@@ -1,0 +1,108 @@
+---
+title: Understanding JSON
+section: Basics
+slug: /docs/basics/understanding-json
+order: 2
+---
+
+# Understanding JSON
+
+JSON, an acronym for JavaScript Object Notation, is the standard format used for nearly all text based resource pack entries. It is a hierarchical system of representing data, and contains multiple data types. Understanding the structure and syntax of JSON is key to effectively creating resource packs.
+
+## Structure
+
+JSON exists in a hierarchy. Here is an example of such a structure from a modified `sounds.json` file:
+
+```json title={assets/minecraft/sounds.json}
+{
+  "ambient.cave": {
+    "sounds": [
+      "ambient/cave/cave1",
+      "ambient/cave/cave2",
+      "ambient/cave/cave3"
+    ],
+    "subtitle": "subtitles.ambient.cave"
+  },
+  "ambient.basalt_deltas.loop": {
+    "sounds": [
+      {
+        "name": "ambient/nether/basalt_deltas/ambience",
+        "stream": true,
+        "volume": 0.5
+      }
+    ]
+  }
+}
+```
+
+We'll use this example to analyze the various components of JSON.
+
+## Data Types
+
+JSON uses multiple data types. Understanding what each data type stores, when to use it, and how it is formatted will be critical for various aspects of resource pack development.
+
+### Strings
+
+A string is simply any text enclosed by quotes, excluding new line characters. An example of a string in the above excerpt is `"ambient/cave/cave1"`. It is important to stress that a string is the only data type enclosed by quotes
+
+### Numbers
+
+A number is, as it sounds, a number. Note that placing a number in quotes will make make it a string, as only strings are quoted. An example of a number in the above example is the decimal `0.5`. Numbers may be positive or negative. They may also be represented in exponent notation. For example, `5E-1` would be a valid equivalent of `0.5`.
+
+### Booleans
+
+A boolean is a `true` or false `value`. In the above example, `true` is a boolean. Like numbers, enclosing a boolean in quotes will produce a string.
+
+### Arrays
+
+Arrays can be thought of as a comma separated list of any data type, including objects, which are discussed below. Arrays are enclosed by brackets (`[...]`). In the above example, the following is an array:
+
+```json
+[
+  "ambient/cave/cave1",
+  "ambient/cave/cave2",
+  "ambient/cave/cave3"
+]
+```
+
+Though this array consists of only strings, the data types in an array can be mixed and matched as needed. Note that the last piece of data in the array is not followed by a comma. This is one of the most common mistakes by beginners. Using a JSON linter or a text editor with builtin syntax checking will help you to avoid such mistakes.
+
+### Objects
+
+Objects consist of a comma separated list of key:value pairs enclosed by elipses `{...}`. The key must be a string, while the value may be any of the aforementioned data types, including another object. In the above example, the following is a simple object, in which the key and value are both strings:
+
+```json
+{
+  "subtitle": "subtitles.ambient.cave"
+}
+```
+
+Here, `"subtitle"` is the key, and `"subtitles.ambient.cave"` is the value. The key and the value are always separated by a colon. Like arrays, the final key:value pair is not succeeded by a comma. As the above key:value pair is the first and last in the object, it is not followed by a comma. Data types can, of course be nested, such is this excerpt from above:
+
+```json
+{
+  "ambient.basalt_deltas.loop": {
+    "sounds": [
+      {
+        "name": "ambient/nether/basalt_deltas/ambience",
+        "stream": true,
+        "volume": 0.5
+      }
+    ]
+  }
+}
+```
+
+Here, `"ambient.basalt_deltas.loop"` is the key of an object, whose value is also an object. Nested inside this object, the another object with the key of `"sounds"` is present. The value of this object is then an array, which contains a single object consisting of three key:value pairs. Note again that the last value in an array or object is not followed by a comma.
+
+## Key Takeaways
+
+- JSON is a hierarchical format used in nearly all text-based data files in Minecraft resource packs
+- The main JSON data types are:
+  - Strings, e.g. `"ambient/cave/cave1"`
+  - Numbers, e.g. `0.5`
+  - Booleans, e.g. `false`
+  - Arrays, e.g. `[1, 2, "three"]`
+  - Objects, e.g. `{"key": "value"}`
+- When listing pieces of data in arrays and objects, commas are succeed all but the final entry
+- Objects and arrays can be continuously nested
