@@ -8,7 +8,7 @@ module.exports = {
         name: "mcjava-wiki",
         description: "Comprehensive documentation for creating and editing Minecraft: Java Edition resource packs",
         siteUrl: "https://wiki.mcjava.dev",
-        githubRepositoryURL: 'https://github.com/Kas-tle/mcjava-wiki',
+        githubRepositoryURL: 'https://github.com/mcjava-wiki/mcjava-wiki',
         baseDirectory: path.resolve(__dirname, './'),
         author: 'Kas-tle',
         navItems: [{ title: 'Docs', url: '/docs/about/introduction/' }],

@@ -18,7 +18,7 @@ export function AppNav() {
         <NavListItem>
             <NavLink
               as="a"
-              href="https://github.com/Kas-tle/mcjava-wiki"
+              href="https://github.com/mcjava-wiki/mcjava-wiki"
               target="_blank"
               rel="noopener noreferrer"
             >
