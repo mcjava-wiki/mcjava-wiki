@@ -17,16 +17,16 @@ Furthermore, the success of the [Bedrock Wiki](https://wiki.bedrock.dev/) in thi
 
 ## Running Locally
 
-```
-$ git clone https://github.com/Kas-tle/mcjava-wiki
-$ cd mcjava-wiki
-$ npm install
-$ npm start
+```bash
+git clone https://github.com/mcjava-wiki/mcjava-wiki
+cd mcjava-wiki
+yarn # if using npm you night need --legacy-peer-deps
+yarn run develop
 ```
 
 Visit `http://localhost:8000/` to view local changes.
 
 ## Contributing
 
-Contributions are also welcome. Please create a pull request.
+Contributions are also welcome. Please create a pull request. For detailed instructions, refer to our [Contributing Page](https://wiki.mcjava.dev/docs/about/contributing).
 

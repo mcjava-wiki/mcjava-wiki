@@ -209,8 +209,10 @@ const CopyCode = styled.button`
   text-align: right;
   top: 0;
   opacity: 0.3;
+  visibility: visible;
   &:hover{
     opacity: 1;
+    visibility: visible;
   }
 `
 
