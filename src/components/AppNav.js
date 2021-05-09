@@ -1,12 +1,7 @@
 import React from 'react'
 import { RiGithubFill, RiDiscordFill } from 'react-icons/ri'
-import {
-  Nav,
-  NavList,
-  NavListItem,
-  NavLink,
-  ColorModeSwitcher,
-} from 'smooth-doc/components'
+import { Nav, NavList, NavListItem, NavLink } from './Nav'
+import { ColorModeSwitcher } from './ColorModeSwitcher'
 
 export function AppNav() {
   return (

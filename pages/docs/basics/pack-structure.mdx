@@ -9,6 +9,32 @@ order: 3
 
 This page will explain how Java Edition resource packs are structured, and therefores gives an idea of how to create your first resource pack from scratch.
 
+## Overview
+
+```text title={Default Resources}
+📦Root
+ ┣ 📂assets
+ ┃ ┣ 📂minecraft
+ ┃ ┃ ┣ 📂blockstates
+ ┃ ┃ ┣ 📂font
+ ┃ ┃ ┣ 📂icons
+ ┃ ┃ ┣ 📂lang
+ ┃ ┃ ┣ 📂models
+ ┃ ┃ ┃ ┣ 📂block
+ ┃ ┃ ┃ ┗ 📂item
+ ┃ ┃ ┣ 📂particles
+ ┃ ┃ ┣ 📂resourcepacks
+ ┃ ┃ ┣ 📂shaders
+ ┃ ┃ ┃ ┣ 📂post
+ ┃ ┃ ┃ ┗ 📂program
+ ┃ ┃ ┣ 📂sounds
+ ┃ ┃ ┣ 📂texts
+ ┃ ┃ ┣ 📂textures
+ ┃ ┃ ┗ 📜sounds.json
+ ┣ 📜pack.mcmeta
+ ┗ 📜pack.png
+```
+
 ## Root Items
 
 These items are not in any folder of the resource pack. It is important to note when compressing a resource pack that these items should be compressed at the same level as the assets folder. A compressed resource pack will not load if compressed from the enclosing folder.
