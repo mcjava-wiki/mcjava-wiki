@@ -42,7 +42,7 @@ fetch("https://api.github.com/repos/mcjava-wiki/mcjava-wiki/commits?path=" + fil
     })
 }
 
-if (document.querySelector(".sc-cxNHIi.gBgWTN") && document.querySelector(".sc-bdnxRM.keyIxl")) {
+if (document.querySelector(".sc-cxNHIi.gBgWTN") && document.querySelector(".sc-bdnxRM.keyIxl") && !document.getElementById( 'contrib-title' )) {
     getContributors();
     console.log("Update contribs!")
 }
