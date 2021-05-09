@@ -21,7 +21,7 @@ export function PageWrapper({
         >
           {children}
           <Helmet>
-            <script src={withPrefix('Contributors.js')} type="text/javascript" />
+            <script defer src={withPrefix('Contributors.js')} />
           </Helmet>
         </DocLayout>
       )
