@@ -10,6 +10,7 @@ export function PageWrapper({
     data: { mdx },
   },
 }) {
+  const isBrowser = typeof window !== 'undefined'
   if (!mdx?.fields?.pageType) return children
   switch (mdx.fields.pageType) {
     case 'doc':
@@ -21,7 +22,7 @@ export function PageWrapper({
         >
           {children}
           <Helmet>
-            <script defer src={withPrefix('Contributors.js')} />
+            {isBrowser && <script defer="defer" src={withPrefix('Contributors.js')} />}
           </Helmet>
         </DocLayout>
       )
