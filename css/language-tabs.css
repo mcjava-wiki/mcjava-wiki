@@ -70,6 +70,12 @@
     color: #000000;
   }
 
+  pre[class~="language-mcfunction"]::before {
+    content: "mcfunction";
+    background: #04f38f;
+    color: white;
+  }
+
   .highlight-line {
     background-color: #1b314f;
     display: block;

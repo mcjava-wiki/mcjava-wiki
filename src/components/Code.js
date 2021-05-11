@@ -201,7 +201,7 @@ const copyToClipboard = (str) => {
 // setup cody copy button
 const CopyCode = styled.button`
   position: absolute;
-  right: 5rem;
+  right: 7rem;
   border-radius: 0 0 0.25rem 0.25rem;
   font-size: 12px;
   letter-spacing: 0.025rem;
