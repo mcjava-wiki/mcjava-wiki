@@ -28,6 +28,10 @@ module.exports = {
     description: "Comprehensive documentation for creating and editing Minecraft: Java Edition resource packs",
     siteUrl: "https://wiki.mcjava.dev",
     author: 'Kas-tle',
+    docSearch: {
+      apiKey: 'da0ca3a42123b75779221abdd6edf8b6',
+      indexName: 'mcjava',
+    },
   },
   plugins: [
     // Build
