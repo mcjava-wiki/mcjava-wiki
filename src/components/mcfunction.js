@@ -19,7 +19,7 @@ Prism.languages.mcfunction = {
         'boolean': /(true|false|0a|0b|1a|1b)/,
         'number': /([\^,~]?\d+(\.\d+)?)|[\^,~]/,
         'string': {
-          'pattern': /((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/,
+          'pattern': /"(?:\\.|[^"\\])*"/,
           'greedy': true
         }
       }
@@ -38,7 +38,7 @@ Prism.languages.mcfunction = {
     'boolean': /(true|false|\d+b)/,
     'number': /([\^,~]?\d+(\.\d+)?(F|f)?)|[\^,~]/,
     'string': {
-      'pattern': /((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/,
+      'pattern': /"(?:\\.|[^"\\])*"/,
       'greedy': true
     }
   };
