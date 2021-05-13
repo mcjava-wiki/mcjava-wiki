@@ -1,0 +1,141 @@
+---
+title: Blockbench
+section: External Programs
+slug: /docs/external-programs/blockbench
+order: 1
+---
+
+import { MdLibraryAdd, MdTune, MdSettings, MdBurstMode, MdFeaturedPlayList, MdAddBox, MdCreateNewFolder, MdDns, MdStar, MdStarBorder, MdZoomOutMap, MdBrightnessAuto, MdClear, MdReplay, MdCheckBox, MdCheckBoxOutlineBlank, MdBlock } from 'react-icons/md'
+import { FaThumbtack, FaMagic , FaTimesCircle, FaCamera, FaRegWindowClose, FaLockOpen, FaLock, FaEye, FaEyeSlash, FaCopy, FaClipboard } from 'react-icons/fa'
+
+# Blockbench
+
+Blockbench is a robust, modern 3D modeling program for Minecraft. It exports JSON-based model files for use in resource packs. As a free and open source project, it is generally the choice of entry level users. 
+
+## Installation
+
+Blockbench can be installed by downloading the latest installer from the [installation page](https://blockbench.net/downloads/) and following the prompts. Blockbench is also availible as a web app, which can be accessed [here](https://web.blockbench.net/). It is generally reccomended to use the standalone app if possible for performance reasons, as well as some extended functionality.
+
+On first opening Blockbench, you will likely be greeted with a changelog. On dismissing this, you will be broungt to the start menu. From here, you can choose the format 'Java Block/Item', which is the format that will be used for unmodded, vanilla resource pack models. 
+
+## Project Settings
+
+On creating a project, you will be brought to a form prompting you for information about your project. Project settings can be revisted at any time from File > <span style="display:inline-block"><MdFeaturedPlayList/></span> Project... Here is some infor about the options: 
+- `File Name` is arbitary 
+- `Parent Model` allows you to use repeated components from another model, and is covered in greater detail in the models section
+- `Ambient Occlusion` refers to whether the block model will render with shadows on its faces in game
+- `UV Mode` specifies how textures are mapped to faces on your model, and should be left as per-face UV for Java Edition models
+- `Texture Size` defines the maximum x and y coordinates that will be used by Blockbench for UV mapping, though this setting is only used by Blockbench, and exported UV values will be translated to a 16 by 16 coordinate system
+
+## Edit Tab
+
+The edit tab is where most of your time in Blockbench will be spent. Tab switching may be done in the top right. From the edit tab, you may import textures, create elements, and setup UV mapping.
+
+### Textures
+
+Textures may be created <span style="font-family:icomoon">&#59650;</span> or imported <span style="display:inline-block"><MdLibraryAdd/></span> from this menu. You may also drag textures from your system''s file explorer utilitiy directly into this menu. It is important to note that, when importing textures, you should place your model within its final location in your resource pack. This will allow Blockbench to export the correct texture paths to your model JSON.
+
+It is also reccomended that you import the default textures, so that Blockbench may relatively reference these without them being present in your own resource pack. See the full guide on [extracting the default assets](https://wiki.mcjava.dev/docs/basics/default-assets) to obtain these. To make Blockbench aware of these assets:
+
+1. Navigate to the settings menu from File > <span style="display:inline-block"><MdTune/></span> Preferences > <span style="display:inline-block"><MdSettings/></span> Settings...
+2. Expand the Defaults section
+3. Choose <span style="display:inline-block"><MdBurstMode/></span> Default Path and select Continue when prompted
+4. Use your file explorer utility to navigate to the textures folder of the default assets
+5. Select the textures folder (`./assets/minecraft/textures`) and open
+
+The default assets are now set, meaning that Blockbench will now attempt to resolve any references to default textures that are missing from your own resource pack.
+
+### Outliner
+
+The outliner allows you to add <span style="display:inline-block"><MdAddBox/></span> elements and lists all the elements contained in your model. You may also add <span style="display:inline-block"><MdCreateNewFolder/></span> groups to organize your model, though it should be noted that groups are purely organizational and in no way factor into Minecraft's rendering of models.
+
+There is also a <span style="display:inline-block"><MdDns/></span> Toggle More Options button. This will allow for the application of additional settings on a per-element basis. The options are as follows:
+
+- Auto UV mode affects how the UV is expanded as the size of the element changes:
+  - <span style="display:inline-block"><FaThumbtack/></span> will always attempt to expand in the positive direction and subtract in the negative direction of the UV coordinates until the edge is reached
+  - <span style="display:inline-block"><FaMagic/></span> will expand the UV based on the direction of element expansion and subtract based on the direction of element deflation
+  - <span style="display:inline-block"><FaTimesCircle/></span> will keep the UV locked to the same postion, regardless of changes in element size
+- Shading mode defines whether or not the element will have shading applied:
+  - <span style="display:inline-block"><MdStar/></span> enables shading for the element
+  - <span style="display:inline-block"><MdStarBorder/></span> disables shading for the element
+- Export mode controlls whether or not the element will be written to the JSON on export:
+  - <span style="display:inline-block"><FaCamera/></span> will write the element on export
+  - <span style="display:inline-block"><FaRegWindowClose/></span> will not write the element on export
+- Lock mode controls whether or not further edits can be made to the element:
+  - <span style="display:inline-block"><FaLockOpen/></span> will allow further edits to the element
+  - <span style="display:inline-block"><FaLock/></span> will lock the element to its current state
+- Visibility mode controls whether or not the element can be seen in Blockbench:
+  - <span style="display:inline-block"><FaEye/></span> will show the element in Blockbench
+  - <span style="display:inline-block"><FaEyeSlash/></span> will not show the element in Blockbench
+
+### UV Editor
+
+The UV editor is where the display of textures on each element face is controlled. A miniaturized version of the UV editor with limited options is always displayed above the textures menu. To see the full UV editor, select any elelemnt face and double click the texture displayed on the leftward menu. The following menu options are availible:
+
+- The UV Grid box defines the amount of steps when dragging the UV size. The default setting will take steps based on the texture pixel size, while the other options step based on the project texture size
+- <span style="display:inline-block"><MdZoomOutMap/></span> maximizes the UV to use the entire texture on the face
+- <span style="display:inline-block"><MdBrightnessAuto/></span> applies automatic UV based on the element size and proportion (the relative option will only consider proportion)
+- <span style="font-family:icomoon">&#59670;</span> mirrors the UV along the X axis
+- <span style="font-family:icomoon">&#59671;</span> mirrors the UV along the Y axis
+- <span style="display:inline-block"><FaCopy/></span> copies the UV of the current face to the clipboard
+- <span style="display:inline-block"><FaClipboard/></span> pastes the UV on the clipboard to the current face
+- <span style="display:inline-block"><MdClear/></span> prevents the face from being written to the JSON file
+- <span style="display:inline-block"><MdReplay/></span> resets the face to missing texture
+- <span style="display:inline-block"><MdCheckBox/></span><span style="display:inline-block"><MdCheckBoxOutlineBlank/></span> enables or disables tinting
+- The cullface selector chooses a face to be culled if there is an adjacent block
+- <span style="display:inline-block"><MdBlock/></span> applies automatic culling
+- The UV rotation scrollbar rotates the UV as it is displayed on the face in increments of 90º
+
+### Element
+
+- Position
+- Size
+- Pivot
+- Rotation
+
+### Toolbar
+
+- Move
+- Resize
+- Rotate
+- Pivot
+- Vertex Snapping
+- Transform Space
+
+## Paint Tab
+
+The paint tab allows for direct texture editting on the model with a relatively simple set of tools:
+
+### Toolbar
+
+- Paint Brush
+- Paint Bucket
+- Eraser
+- Color Picker
+- Draw Shape
+- Copy Paste
+- Mirror Painting
+- Lock Alpha Channel
+- Painting Grid
+
+### Color Picker
+
+## Display Tab
+
+The display tab modifies how the model is shown based on inventory slot and camera view, as well as displays in item frames, on ground, and in GUI.
+
+### Presets
+
+### Slot
+
+### Reference Model
+
+### Display Options
+
+- Rotation
+- Translation
+- Scale
+
+## Plugins
+
+## Key Takeaways

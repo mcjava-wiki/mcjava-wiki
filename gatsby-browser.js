@@ -7,7 +7,7 @@ import Prism from 'prism-react-renderer/prism'
 
 require('./src/components/mcfunction')
 
-require("./css/language-tabs.css")
+require("./css/custom.css")
 
 export const wrapRootElement = ({ element }) => {
   return <RootWrapper>{element}</RootWrapper>

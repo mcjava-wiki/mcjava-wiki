@@ -1,4 +1,9 @@
-  pre[class*="language-"] {
+@font-face {
+  font-family: 'icomoon';
+  src: local('icomoon'), url(../static/fonts/icomoon.ttf) format('truetype');
+}
+
+pre[class*="language-"] {
     position: relative;
     -webkit-overflow-scrolling: touch;
   }
