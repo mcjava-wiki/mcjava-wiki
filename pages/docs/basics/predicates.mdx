@@ -1,0 +1,124 @@
+---
+title: Predicates
+section: Basics
+slug: /docs/basics/predicates
+order: 4
+---
+
+# Predicates
+
+This page will explain how Java Edition resource packs use predicates to display different models for a single item based on select ingame NBT values or client-side-only states.
+
+## Types
+
+### Custom Model Data
+
+Custom model data can be defined for any item model and uses the NBT tag `CustomModelData`. Custom model data is simply an intger value, and the predicate value maps directly to its NBT value. Items can be obtained with this nbt tag using the following syntax for the give command:
+
+`give @p diamond_axe{CustomModelData:1}`
+
+Note that this is the only predicate that can be used on any item model, as it was added to the game specifically for the purpose of custom resoruce pack creation. Other predicate types can only be used in specific circumstances.
+
+### Damage and Damaged
+
+Damage and damaged predicates can only be defined for models that have durability. This generally includes tools, weapons, and armor. In the case of armor, it is important to note that the model will not be visible in armor slots. Damage refers to the durability of the item, while damaged refers to weether or not the item can be damaged. For example, an item with unbreaking NBT cannot be damaged.
+
+The predicate `damage` is a float that is obtained by dividing the total durability of the item, which varies per item, by the current NBT `Damage` value of the item.
+
+The predicate `damaged` is technically a boolean represented by 0 or 1. The NBT `{Unbreakable:1b}` most closely maps to a `damaged` value of 0, and its inverse a `damaged` value of 1. However, it is important to note that an item without any NBT `Damage`, regardless of the state of its `Unbreakable` NBT, will always map to a `damaged` value of 0.
+
+### Other Predicates
+
+Other predicates are used on an item specific basis, and will be detailed in a later more exhaustive section about predicates:
+
+- `angle` (compass, recovery_compass)
+- `blocking` (shield)
+- `broken` (elytra)
+- `cast` (fishing_rod)
+- `charged` (crossbow)
+- `firework` (crossbow)
+- `pull` (crossbow, bow)
+- `pulling` (crossbow, bow)
+- `filled` (bundle, map)
+- `level` (light)
+- `throwing` (trident)
+- `time` (clock)
+- `tooting` (goat_horn)
+
+## Usage
+
+### Definition
+
+Predicates are defined in an item model via the `overrides` array as follows. Since these predicates override vanilla items, an overrides array will only be effective for models existing in the `minecraft` namespace. Take the example of a diamond sword with custom model data, damage, and damaged predicates:
+
+```json title={assets/minecraft/models/diamond_sword.json} highlights={6-50}
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minecraft:item/diamond_sword"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 2,
+        "damaged": 0
+      },
+      "model": "minecraft:custom/a"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 5,
+        "damaged": 1
+      },
+      "model": "minecraft:custom/b"
+    },
+    {
+      "predicate": {
+        "damage": 0.00192184497,
+        "damaged": 1
+      },
+      "model": "minecraft:custom/c"
+    },
+    {
+      "predicate": {
+        "damage": 0.00512491992,
+        "damaged": 0
+      },
+      "model": "minecraft:custom/d"
+    },
+    {
+      "predicate": {
+        "damage": 0.00768737988,
+        "damaged": 1
+      },
+      "model": "minecraft:custom/e"
+    },
+    {
+      "predicate": {
+        "damage": 0.00384368994,
+        "custom_model_data": 8,
+        "damaged": 1
+      },
+      "model": "minecraft:custom/f"
+    }
+  ]
+}
+```
+
+Here, within the overrides array. Each entry must have a `predicate` key and a `model` key. While the `predicate` key is an object consisting of multiple predicate values, `model` is a file path that uses standard namespace notation starting from the items folder and excluding the file extension. When no namespace is specified, the `minecraft` namespace is assumed.
+
+### Predicate Resolution
+
+It is important to note that what model will be displayed does depend on the order of entires in the `overrides` array. Put succinctly:
+- Start at the *end* of the `overrides` array.
+- If no value is specified for any given predicate, assume a value of 0.
+- Take the first entry that is less than or equal to the actual state of the item. The actual state may be defined by NBT or some internal client state.
+
+Though these two rules may seem simple, this can become complicated when dealing with predicates like `damaged` that do not map directly to their equivalent NBT value. This concept will be explored later in the more exhaustive predicates section.
+
+## Key Takeaways
+
+- Predicates allow the display different models for a single item based on select ingame NBT values or client-side-only states
+- The predicate custom model data can be used on any item, the damage and damage predicates can be used on any item with durability, and other predicates exist for use with specific items
+- Predicates are defined in the `overrides` array of the model JSON
+- Predicates are resolved starting at the *end* of the `overrides` array, using the first entry that is less than or equal to the actual state of the item
