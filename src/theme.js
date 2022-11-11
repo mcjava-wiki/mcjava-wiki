@@ -1,4 +1,4 @@
-import customTheme from 'prism-react-renderer/themes/nightOwl'
+import customThemeDark from 'prism-react-renderer/themes/nightOwl'
 
 import { transparentize } from 'polished'
 import { css, th, defaultTheme, aliasColor } from '@xstyled/styled-components'
@@ -27,7 +27,7 @@ export const theme = {
       outline-color: primary-500;
     }
   `,
-  'prism-theme': customTheme,
+  'prism-theme': customThemeDark,
   fonts: {
     base:
       '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
@@ -76,7 +76,7 @@ export const theme = {
     ...defaultTheme.colors,
 
     // Primary = indigo
-    ...aliasColor('primary', 'indigo'),
+    ...aliasColor('primary', 'cyan'),
 
     primary: th.color('primary-500'),
     'primary-a500': (p) => transparentize(0.5, th.color('primary-500')(p)),
@@ -116,7 +116,7 @@ export const theme = {
 
     modes: {
       dark: {
-        background: th.color('gray-900'),
+        background: th.color('black'),
         'editor-background': th.color('black'),
         'background-light': th.color('gray-800'),
         'background-primary': th.color('primary-900'),

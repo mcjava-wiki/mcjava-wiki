@@ -9,6 +9,7 @@ import {
   LivePreview as BaseLivePreview,
 } from 'react-live'
 import { mdx } from '@mdx-js/react'
+import { FaClipboard } from 'react-icons/fa'
 
 const Pre = styled.pre`
   position: relative;
@@ -31,6 +32,8 @@ const Pre = styled.pre`
   word-break: normal;
   hyphens: none;
   padding: 4 0;
+
+  box-shadow: rgba(34, 211, 238, 0.20) 0px 0px 200px;
 
   textarea {
     &:focus {
@@ -74,7 +77,7 @@ const CodeLabel = styled.button`
   padding: 0.25rem 0.5rem;
   text-align: right;
   top: 0;
-  background: #6466ec;
+  background: #0891B2;
   color: #ffffff;
 `
 const getCodeTitle = (meta) => {
@@ -201,18 +204,24 @@ const copyToClipboard = (str) => {
 // setup cody copy button
 const CopyCode = styled.button`
   position: absolute;
-  right: 7rem;
-  border-radius: 0 0 0.25rem 0.25rem;
+  right: 0;
+  border-radius: 0.25rem 0 0 0;
   font-size: 12px;
   letter-spacing: 0.025rem;
   padding: 0.25rem 0.5rem;
   text-align: right;
-  top: 0;
+  bottom: 0;
   opacity: 0.3;
   visibility: visible;
+  background: #67E8F9;
   &:hover{
     opacity: 1;
     visibility: visible;
+  }
+  &:active{
+    opacity: 1;
+    visibility: visible;
+    background: #34D399;
   }
 `
 
@@ -252,7 +261,7 @@ export function Code({ children, lang = 'markup', metastring, live, noInline }) 
         <Pre className={className} style={style}>
           {getCodeTitle(metastring)}
           <div>
-          <CopyCode onClick={handleClick}>Copy</CopyCode>
+          <CopyCode onClick={handleClick}><FaClipboard/></CopyCode>
           {tokens.map((line, i) => {
             const lineProps = getLineProps({ line, key: i })
             if (shouldHighlightLine(i)) {
