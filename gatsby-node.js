@@ -126,13 +126,13 @@ function onCreateMdxNode({ node, getNode, actions }, options) {
   function getEditLink() {
     const {
       baseDirectory = path.resolve(__dirname, './'),
-      githubRepositoryURL = 'https://github.com/mcjava-wiki/mcjava-wiki',
+      githubRepositoryURL = 'https://github.dev/mcjava-wiki/mcjava-wiki',
       githubDefaultBranch = 'main',
     } = options
     const repositoryURL = githubRepositoryURL
     if (!baseDirectory || !repositoryURL) return ''
     const relativePath = node.fileAbsolutePath.replace(baseDirectory, '')
-    return `${repositoryURL}/edit/${githubDefaultBranch}${relativePath}`
+    return `${repositoryURL}/blob/${githubDefaultBranch}${relativePath}`
   }
 
   createNodeField({
