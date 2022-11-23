@@ -1,6 +1,6 @@
 # mcjava-wiki
 
-This is a technical wiki for Minecraft: Java Edition, primarily focused on resource-related tutorials. The ultimate goal is to be a reliable source of information for all things Java Edition resource pack related.
+This is a technical wiki for Minecraft: Java Edition, primarily focused on resource-related tutorials. The ultimate goal is to be a reliable source of information for all things Java Edition resource pack related. It is accessible at https://wiki.mcjava.dev/docs.
 
 ## Why?
 
