@@ -56,13 +56,13 @@ The first step in the conversion process is finding all relavent predicate entri
 
 1. Store the identifier of the overridden Java item, which matches the name of the model file (e.g. `diamond_sword`)
 2. Store or parse the relavent predicate entries, which currently consist of `.predicate.damage`,`.predicate.damaged`, and `.predicate.custom_model_data`:
-    a. for `.predicate.damage`, convert the given float to a durability value by multiplying the given float by the max durability of the item, and taking the integer ceiling of the result
-    b. for `.predicate.damaged`, convert the given integer to a boolean, using `true` if the given integer is 1, and `false` if the given integer is 0
-    c. for `.predicate.custom_model_data`, simply store the given integer value
+    1. for `.predicate.damage`, convert the given float to a durability value by multiplying the given float by the max durability of the item, and taking the integer ceiling of the result
+    2. for `.predicate.damaged`, convert the given integer to a boolean, using `true` if the given integer is 1, and `false` if the given integer is 0
+    3. for `.predicate.custom_model_data`, simply store the given integer value
 3. From the `.model` field of the entry, parse and store the following:
-    a. the namespace of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the namespace is `minecraft`)
-    b. the model path of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model path is `item/`)
-    c. the model name of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model name is `diamond_sword`)
+    1. the namespace of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the namespace is `minecraft`)
+    2. the model path of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model path is `item/`)
+    3. the model name of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model name is `diamond_sword`)
 
 ### Vanilla Item Models
 
@@ -70,7 +70,7 @@ In some cases, the user may want to convert item models that are not implemented
 
 1. The model's path also exists in the vanilla resources under `assets/minecraft/models/item/*.json`
 2. Less the overrides array, the contents of the file do not match that of the same model path in the vanilla resources
-    a. this is intended to prevent the bloating of the pack by models that function the same as vanilla models
+    1. this is intended to prevent the bloating of the pack by models that function the same as vanilla models
 
 ## Gathering Block Models
 
