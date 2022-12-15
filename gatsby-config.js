@@ -20,6 +20,7 @@ module.exports = {
       'GUIs',
       'Texts',
       'Shaders',
+      'Bedrock Equivalencies',
       'Techniques',
       'Troubleshooting'
     ],

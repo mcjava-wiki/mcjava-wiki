@@ -1,0 +1,91 @@
+---
+title: Resource Pack Conversion
+section: Bedrock Equivalencies
+slug: /docs/bedrock-equivalencies/resource-pack-conversion
+order: 1
+---
+
+# Resource Pack Conversion
+
+This page is meant to explain the process of converting a Java resource pack containing [predicates](/docs/basics/predicates) for use with Geyser, which currently include custom model data, damage, and unbreaking status. Though some code snipets may be given as examples, the primary purpose of this page is to explain the general process, whether in a manual or automated fashion.
+
+## Introduction
+
+Resource packs are inherently complex, and converting and using your particular pack with Geyser may be more complex. This information here is largely general and geared towards basic 2D and 3D models added through custom model data or damage predicates. Broader support for features like block models, blockstates, armor, sounds, emoji, custom bows, eating animations, inventory for 3D models, item frame displays, etc. may be added to converters and Geyser in the future. But recognize that at this time, you are largely on your own with more complex use cases like this, as the systems to automate these processes are still in development. The bulk of this overview is based on what I have learned from writing an automated bash script called [java2bedrock](https://github.com/Kas-tle/java2bedrock.sh). Do note, however, that this page does contain steps that the converter does not currently carry out. Some of this is due to a lack of support on Geyser's end, while some us due to implementation difficulties on the converter's end.
+
+## Concept
+
+When converting a resource pack from Java to Bedrock, even if the conversion process has been automated, it is important to understand what is being done. In the case of predicates commonly used in Java Edition, it must be noted that these do not directly exist on Bedrock Edition. However, Bedrock edition does have the ability to implement fully custom items. Geyser gets around this by allowing the user to map Java predicates to a Bedrock custom item. For more information on Bedrock custom items, please refer to the [Items](https://wiki.bedrock.dev/items/items-intro.html) section of the Bedrock Wiki. The following is an example of a Geyser item mappings file. More information about these files can be found on the [Custom Items](https://wiki.geysermc.org/geyser/custom-items/) page of the Geyser Wiki.
+
+```json highlights={4} title={./custom_mappings/geyser_mappings.json}
+{
+    "format_version": "1",
+    "items": {
+        "minecraft:apple": [
+            {
+                "name": "test_food",
+                "custom_model_data": 1,
+                "icon": "apple_golden"
+            }
+        ],
+        "minecraft:diamond_sword": [
+            {
+                "name": "test_sword_cmd",
+                "custom_model_data": 1,
+                "icon": "sword"
+            },
+            {
+                "name": "test_sword_damage",
+                "damage_predicate": 1,
+                "icon": "sword"
+            }
+        ]
+    }
+}
+```
+
+Any converter that operates without a Geyser extension to register its items will need to provide a mappings file in the same format.
+
+## Gathering Item Models
+
+In order to begin the conversion process, what needs converting must first be identified. In the case of item models, this information can be obtained by parsing each file in the given resource pack that matches the path of a file in the vanilla resources under the path `assets/minecraft/models/item/*.json`.
+
+### Predicate Entries
+
+The first step in the conversion process is finding all relavent predicate entries. This information is needed to construct the mappings file and decide which models need to be converted. This process can be broken down into steps as following steps, which must be performed on all vanilla item model definitions (contained in the Java resource pack under `assets/minecraft/models/item/*.json`) for each entry contained in their respective overrides arrays:
+
+1. Store the identifier of the overridden Java item, which matches the name of the model file (e.g. `diamond_sword`)
+2. Store or parse the relavent predicate entries, which currently consist of `.predicate.damage`,`.predicate.damaged`, and `.predicate.custom_model_data`:
+  1. for `.predicate.damage`, convert the given float to a durability value by multiplying the given float by the max durability of the item, and taking the integer ceiling of the result
+  2. for `.predicate.damaged`, convert the given integer to a boolean, using `true` if the given integer is 1, and `false` if the given integer is 0
+  3. for `.predicate.custom_model_data`, simply store the given int value
+3. From the `.model` field of the entry, parse and store the following:
+  1. the namespace of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the namespace is `minecraft`)
+  2. the model path of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model path is `item/`)
+  3. the model name of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model path is `item/`)
+
+### Vanilla Item Models
+
+In some cases, the user may want to convert item models that are not implemented through predicate overrides. In such a case, the model will be displayed at a resource pack level with no intervention required from Geyser. In this case, a list of models should be made that satisfies the following criteria:
+
+1. The model's path also exists in the vanilla resources under `assets/minecraft/models/item/*.json`
+2. Less the overrides array, the contents of the file do not match that of the same model path in the vanilla resources
+  1. this is intended to prevent the bloating of the pack by models that function the same as vanilla models
+
+## Gathering Block Models
+
+Note that while the process for resolving block models for conversion is described here, Geyser does not currently have support for block mappings. The process for identifying which block models need to be converted should follow this outline:
+
+1. For all files matching `assets/minecraft/blockstates/*.json` from the vanilla resources, construct an array of all listed models, which are contained under the JSON paths `.multipart.[].apply.model` and `.variants.*.model`
+2. For all files in the given resource pack that correspond to a file matching `assets/minecraft/blockstates/*.json` from the vanilla resources construct an array of all listed models using the JSON paths defined above
+3. Combine these arrays and remove duplicate entries
+4. Construct an array of all model JSONs in the given resource pack
+5. Find the union of the model JSONs array and the array derrived from blockstate entries
+
+## Parental Filtering and Resolution
+
+Next, the parental status of each model must be determined, whether the model is a predicate entry or a vanilla item model.
+
+### Parental Resolution
+
+Nearly all models in the vanilla resources use parentals in order to prevent the repetition of common model elements. This means that the textures, elements, and display settings of a given model will not always be listed in a given model file. However, these must be known before the conversion of the model can occur. As a result, these must be resolved for any block or item model that has been identified for conversion. This is one of the most computationally expensive parts of the conversion process.
