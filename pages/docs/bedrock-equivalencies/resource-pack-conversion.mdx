@@ -46,9 +46,9 @@ When converting a resource pack from Java to Bedrock, even if the conversion pro
 
 Any converter that operates without a Geyser extension to register its items will need to provide a mappings file in the same format.
 
-## Gathering Item Models
+## Gathering Models
 
-In order to begin the conversion process, what needs converting must first be identified. In the case of item models, this information can be obtained by parsing each file in the given resource pack that matches the path of a file in the vanilla resources under the path `assets/minecraft/models/item/*.json`.
+In order to begin the conversion process, what needs converting must first be identified. Since no one item entry depends on another, each model gathering subtype may be done in parallel. 
 
 ### Predicate Entries
 
@@ -63,16 +63,17 @@ The first step in the conversion process is finding all relavent predicate entri
     1. the namespace of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the namespace is `minecraft`)
     2. the model path of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model path is `item/`)
     3. the model name of the predicate entry's model (e.g. in `minecraft:item/diamond_sword`, the model name is `diamond_sword`)
+4. Hash the Java item identifier and relavent predicate values to construct a unique hash for each predicate entry that will persist accross conversions 
 
 ### Vanilla Item Models
 
-In some cases, the user may want to convert item models that are not implemented through predicate overrides. In such a case, the model will be displayed at a resource pack level with no intervention required from Geyser. In this case, a list of models should be made that satisfies the following criteria:
+In some cases, the user may want to convert item models that are not implemented through predicate overrides. In such a case, the model will be displayed at a resource pack level with no intervention required from Geyser. A list of models should be made that satisfies the following criteria:
 
 1. The model's path also exists in the vanilla resources under `assets/minecraft/models/item/*.json`
 2. Less the overrides array, the contents of the file do not match that of the same model path in the vanilla resources
     1. this is intended to prevent the bloating of the pack by models that function the same as vanilla models
 
-## Gathering Block Models
+### Block Models
 
 Note that while the process for resolving block models for conversion is described here, Geyser does not currently have support for block mappings. The process for identifying which block models need to be converted should follow this outline:
 
@@ -88,4 +89,31 @@ Next, the parental status of each model must be determined, whether the model is
 
 ### Parental Resolution
 
-Nearly all models in the vanilla resources use parentals in order to prevent the repetition of common model elements. This means that the textures, elements, and display settings of a given model will not always be listed in a given model file. However, these must be known before the conversion of the model can occur. As a result, these must be resolved for any block or item model that has been identified for conversion. This is one of the most computationally expensive parts of the conversion process.
+Nearly all models in the vanilla resources use parentals in order to prevent the repetition of common model elements. This means that the textures, elements, and display settings of a given model will not always be listed in a given model file. However, these must be known before the conversion of the model can occur. As a result, these must be resolved for any block or item model that has been identified for conversion. This is one of the most computationally expensive parts of the conversion process. Furthermore, all textures must be known for texture atlas generation to be completed, as the optimal atlas generation process relies on finding texture overlap accross models. Given that these values will be used quite a ways down the road, it may be impractical to store these all in memory, especially since some high element count models can sometimes have file sizes in the tens of megabytes. It would likely be useful to store the texture list of each model in memory since those will be used shortly in the atlas generation step. This process can be performed in parallel for each model. In the case of item models parental resolution should attempt to continue until the end of the parent chain is reached or elements, textures, and display settings have been found for the model. This is the same for block models, except resolution can stop when elements and textures are found, since display settings are not relavent to block models.
+
+### Parental Filtering
+
+Based on the resolved parent, some decisions must be made with regards to the model conversion that will occur later. The most obvious case of this is the parent `minecraft:builtin/generated`. Java models that lead to this parental will render an extruded mesh from a provided texture. There are two ways to mimic this behavior on Bedrock, the pros and cons of which will be discussed in the geometry conversion section.
+
+## Texture Atlas Generation
+
+Texture atlases must be generated for each item model, as Bedrock models when implemented as entities via attachables may only have one texture. Items with the `minecraft:builtin/generated` parent should be excluded from this process, since meither method by which they can be displayed allows for UV manipulation. For models that are used only for blocks, it is technically possible to use material instances instead of atlas generation. This would be most helpful in cases where many block models with shared textures are used, and the traditional method of atlas generation would lead to instability due to the size of the generated atlases.
+
+It should be noted that this is the most difficult part of the pack conversion process from a clientside performance perspective. Since Bedrock supports mobile devices, it is unreasonable to expect that all Bedrock players will have access to a desktop grade GPU. At a maximum, one should aim for generated atlases to be no larger than 4096, though in particularly low spec devices like the Nintendo Switch, even this may be pushing the envelope.
+
+### Atlas Inclusion
+
+For our purposes, atlas inclusion will be the process of deciding which textures will be combined into atlases. In my opinion, the optimal method for atlas inclusion follows a proposed algorithim, which should be looped over each item model's texture list. The first item model texture list should be placed as the first entry in a list of texture lists. For all subsequent item model texture lists:
+
+1. Check to see if the new item model texture lists has any overlapping textures with the current list of texture lists
+2. Any texture lists that overlap with new item model texture list should be combined with each other
+3. If no texture lists overlap with the new item model texture list, the item model texture list should be placed as its own entry in the list of texture lists
+4. The process should continue to the next item model texture list until all item model texture lists have been itterated over
+
+There are, however, some drawbacks to this method. As previously stated, the size of generated atlases should be kept at a minimum. In packs in which models use mutliple large shared textures, this will lead to the generation of extremely large atlases. Unfortunately, the solution to this problem will often be to reduce texture resolution and reduce the size of shared texture networks in cases where they lead to this result. Such optimizations will likely need to be done manually.
+
+### Atlas Construction
+
+Atlases should, of course, be constructed to minimize empty space. In addition, the location of all textures on atlases must be recorded. This is needed to direct UV shifts in the actual model conversion process. The X and Y pixel coordinates and texture path are sufficent.
+
+## Geometry Conversion
