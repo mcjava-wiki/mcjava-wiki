@@ -8,6 +8,9 @@ on:
       - synchronize
       - closed
 
+permissions:
+  pull-requests: write
+
 concurrency: preview-${{ github.ref }}
 
 jobs:
