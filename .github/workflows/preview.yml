@@ -25,7 +25,7 @@ jobs:
           yarn run build
 
       - name: Deploy preview
-        uses: rossjrw/pr-preview-action@v1
+        uses: ACCESS-NRI/pr-preview-action@v1
         with:
           source-dir: ./public/
           preview-branch: preview
