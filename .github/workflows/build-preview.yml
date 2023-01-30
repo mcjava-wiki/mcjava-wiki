@@ -21,6 +21,8 @@ jobs:
       - name: Install and Build
         run: |
           yarn
+          export PREFIX_PATHS=true
+          export PATH_PREFIX=/pr-preview/pr-${{ github.event.number }}
           yarn run build
 
       - name: Save PR number
