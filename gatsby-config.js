@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+  pathPrefix: `${process.env.PATH_PREFIX}`,
   siteMetadata: {
     title: "mcjava-wiki",
     githubRepositoryURL: 'https://github.com/mcjava-wiki/mcjava-wiki',
