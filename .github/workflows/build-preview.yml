@@ -7,8 +7,9 @@ on:
       - reopened
       - synchronize
 
-concurrency: preview-${{ github.ref }}
-cancel-in-progress: true
+concurrency: 
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-preview:
