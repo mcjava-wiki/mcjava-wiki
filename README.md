@@ -30,4 +30,4 @@ Visit `http://localhost:8000/` to view local changes.
 
 Contributions are also welcome. Please create a pull request. For detailed instructions, refer to our [Contributing Page](https://wiki.mcjava.dev/docs/about/contributing).
 
-This is intended to test the PR preview system (again, 2).
+This is intended to test the PR preview system (again, 3).
