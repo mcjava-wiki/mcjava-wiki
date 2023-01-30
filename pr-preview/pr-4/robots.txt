@@ -1,0 +1,3 @@
+User-agent: *
+Sitemap: https://wiki.mcjava.dev/sitemap/sitemap-index.xml
+Host: https://wiki.mcjava.dev
