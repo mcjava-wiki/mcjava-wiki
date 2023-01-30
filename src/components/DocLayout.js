@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
 import { useDialogState, Dialog, DialogDisclosure } from 'reakit/Dialog'
 import { Portal } from 'reakit/Portal'
-import { VscChevronUp } from 'react-icons/vsc'
+import { FaBars } from 'react-icons/fa'
 import { RiPencilLine } from 'react-icons/ri'
 import { ScreenContainer } from './ScreenContainer'
 import { SideNav, useSideNavState, useSideNavPrevNext } from './SideNav'
@@ -93,12 +93,12 @@ const SidebarSticky = styled.aside`
 const MenuButton = styled.button`
   appearance: none;
   border: 0;
-  border-radius: 50%;
+  border-radius: 20%;
   width: 60;
   height: 60;
   position: fixed;
   right: ${th.size(8)};
-  bottom: ${th.size(8)};
+  top: ${th.size(55)};
   z-index: 25;
   display: flex;
   flex-direction: column;
@@ -114,26 +114,14 @@ const MenuButton = styled.button`
   }
 
   > svg {
-    width: 24;
-    height: 24;
+    width: 30;
+    height: 30;
     transition: transform 200ms ease-in-out;
-
-    &:first-child {
-      transform: translateX(-1px);
-    }
-
-    &:last-child {
-      transform: translate(-1px) rotate(180deg);
-    }
   }
 
   &[aria-expanded='true'] {
-    > svg:first-child {
-      transform: translate(-1px, 16px);
-    }
-
     > svg:last-child {
-      transform: translate(-1px, -16px) rotate(180deg);
+      transform: rotate(90deg);
     }
   }
 `
@@ -147,8 +135,7 @@ function MobileSidebar({ children }) {
       </Dialog>
       <Portal>
         <DialogDisclosure {...dialog} as={MenuButton}>
-          <VscChevronUp />
-          <VscChevronUp />
+          <FaBars />
         </DialogDisclosure>
       </Portal>
     </>
