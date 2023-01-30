@@ -1,0 +1,41 @@
+name: Deploy PR previews
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency: preview-${{ github.ref }}
+cancel-in-progress: true
+
+jobs:
+  build-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install and Build
+        run: |
+          yarn
+          yarn run build
+
+      - name: Save PR number
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NB
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: pr/
+
+      - name: Save built site
+        run: |
+          mkdir -p ./pr_site
+          mv public ./pr_site/.
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr_site
+          path: pr_site/
