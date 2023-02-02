@@ -5,7 +5,7 @@ import Prism from 'prism-react-renderer/prism'
 
 (typeof global !== 'undefined' ? global : window).Prism = Prism
 
-require('./src/components/mcfunction')
+require('./src/components/highlights')
 
 require("./css/custom.css")
 

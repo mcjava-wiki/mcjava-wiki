@@ -9,18 +9,14 @@ import { AppNav } from './AppNav'
 const AppHeaderQuery = graphql`
   query AppHeader {
     logos: allFile(
-      filter: {
-        sourceInstanceName: { in: ["image", "default-image"] }
-        name: { glob: "logo-nav*" }
-      }
-      sort: { fields: sourceInstanceName, order: DESC }
+      filter: {sourceInstanceName: {in: ["image", "default-image"]}, name: {glob: "logo-nav*"}}
+      sort: {sourceInstanceName: DESC}
     ) {
       nodes {
         name
         publicURL
       }
     }
-
     site {
       siteMetadata {
         title

@@ -81,6 +81,12 @@ pre[class*="language-"] {
     color: white;
   }
 
+  pre[class~="language-molang"]::before {
+    content: "molang";
+    background: #b00029;
+    color: white;
+  }
+
   .highlight-line {
     background-color: #1b314f;
     display: block;

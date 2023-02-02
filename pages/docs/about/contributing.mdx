@@ -272,6 +272,29 @@ The code block would then render as:
 }
 ```
 
+#### Prism Custom Language Presets
+
+There are also prism custom language presets for molang and mcfunction:
+
+```mcfunction title={/path/somefile.mcfunction}
+say Bye...
+playsound random.explode
+teleport @s ~10 ~10 ~10 true
+say OUCH!
+```
+
+```molang title={/path/somefile.molang}
+(v.moo > 0) ? {
+    v.x = math.sin(q.life_time * 45);
+    v.x = v.x * v.x + 17.3;
+    t.sin_x = math.sin(v.x);
+    v.x = t.sin_x * t.sin_x + v.x * v.x;
+    v.x = math.sqrt(v.x) * v.x * math.pi;
+}
+```
+
+These can be defined in [highlights.js](https://github.com/mcjava-wiki/mcjava-wiki/blob/main/src/components/mcfunction.js) and should then have appropriate entries added in [custom.css](https://github.com/mcjava-wiki/mcjava-wiki/blob/main/css/custom.css) to define their tag color.
+
 ## Key Takeaways
 
 - Contributions are always welcome, and are critical to the success and quality of the wiki
