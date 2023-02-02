@@ -29,8 +29,7 @@ export const theme = {
   `,
   'prism-theme': customThemeDark,
   fonts: {
-    base:
-      '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+    base: '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
   },
   lineHeights: {
     base: 1.4,

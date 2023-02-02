@@ -1,23 +1,23 @@
 import * as React from 'react'
-import { Button as ReakitButton } from 'reakit/Button'
+import { Button as AriakitButton } from 'ariakit/button'
 import styled, { css } from '@xstyled/styled-components'
 
-const variant = ({ background, backgroundHover, on }) => () => {
-  return css`
-    background-color: ${background};
-    color: ${on};
-
-    &:hover:not(:disabled) {
-      background-color: ${backgroundHover};
+const variant =
+  ({ background, backgroundHover, on }) =>
+  () => {
+    return css`
+      background-color: ${background};
       color: ${on};
-    }
-
-    &:active:not(:disabled) {
-      background-color: ${backgroundHover};
-      color: ${on};
-    }
-  `
-}
+      &:hover:not(:disabled) {
+        background-color: ${backgroundHover};
+        color: ${on};
+      }
+      &:active:not(:disabled) {
+        background-color: ${backgroundHover};
+        color: ${on};
+      }
+    `
+  }
 
 const InnerButton = styled.buttonBox`
   appearance: none;
@@ -31,12 +31,10 @@ const InnerButton = styled.buttonBox`
   font-size: 16;
   padding: 2 3;
   text-decoration: none !important;
-
   &:disabled {
     opacity: 0.5;
     cursor: default;
   }
-
   &[data-variant='primary'] {
     ${variant({
       background: 'primary-600',
@@ -44,7 +42,6 @@ const InnerButton = styled.buttonBox`
       on: 'white',
     })}
   }
-
   &[data-variant='success'] {
     ${variant({
       background: 'green-600',
@@ -52,7 +49,6 @@ const InnerButton = styled.buttonBox`
       on: 'white',
     })}
   }
-
   &[data-variant='danger'] {
     ${variant({
       background: 'red-600',
@@ -60,7 +56,6 @@ const InnerButton = styled.buttonBox`
       on: 'white',
     })}
   }
-
   &[data-variant='neutral'] {
     ${variant({
       background: 'gray-300',
@@ -73,13 +68,13 @@ const InnerButton = styled.buttonBox`
 export const Button = React.forwardRef(
   ({ variant = 'primary', children, ...props }, ref) => {
     return (
-      <ReakitButton ref={ref} data-variant={variant}>
+      <AriakitButton ref={ref} data-variant={variant}>
         {(buttonProps) => (
           <InnerButton {...buttonProps} {...props}>
             {children}
           </InnerButton>
         )}
-      </ReakitButton>
+      </AriakitButton>
     )
   },
 )

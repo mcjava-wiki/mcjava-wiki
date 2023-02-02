@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
-import { useDialogState, Dialog, DialogDisclosure } from 'reakit/Dialog'
-import { Portal } from 'reakit/Portal'
+import { useDialogState, Dialog, DialogDisclosure } from 'ariakit/dialog'
+import { Portal } from 'ariakit/portal'
 import { FaBars } from 'react-icons/fa'
 import { RiPencilLine } from 'react-icons/ri'
 import { ScreenContainer } from './ScreenContainer'
@@ -130,11 +130,11 @@ function MobileSidebar({ children }) {
   const dialog = useDialogState({ animated: true })
   return (
     <>
-      <Dialog {...dialog} as={SidebarDialog}>
+      <Dialog state={dialog} as={SidebarDialog}>
         {children}
       </Dialog>
       <Portal>
-        <DialogDisclosure {...dialog} as={MenuButton}>
+      <DialogDisclosure state={dialog} as={MenuButton}>
           <FaBars />
         </DialogDisclosure>
       </Portal>

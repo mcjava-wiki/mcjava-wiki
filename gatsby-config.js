@@ -1,5 +1,18 @@
 const path = require('path')
 
+const visit = require('unist-util-visit')
+
+/** @type {import('unified').Plugin<Array<void>, import('hast').Root>} */
+function rehypeMetaAsAttributes() {
+  return (tree) => {
+    visit(tree, 'element', (node) => {
+      if (node.tagName === 'code' && node.data && node.data.meta) {
+        node.properties.meta = node.data.meta
+      }
+    })
+  }
+}
+
 module.exports = {
   pathPrefix: `${process.env.PATH_PREFIX}`,
   siteMetadata: {
@@ -31,8 +44,9 @@ module.exports = {
     siteUrl: "https://wiki.mcjava.dev",
     author: 'Kas-tle',
     docSearch: {
-      apiKey: 'da0ca3a42123b75779221abdd6edf8b6',
+      apiKey: 'b682d90da6cabb2ac9a4d1d236b24d92',
       indexName: 'mcjava',
+      appId: '3QIDHF9CHG',
     },
   },
   plugins: [
@@ -55,29 +69,26 @@ module.exports = {
       resolve: 'gatsby-plugin-mdx',
       options: {
         extensions: [`.mdx`, `.md`],
+        mdxOptions: {
+          remarkPlugins: [
+            require(`remark-gfm`),
+          ],
+          rehypePlugins: [rehypeMetaAsAttributes],
+        },
         gatsbyRemarkPlugins: [
-          {
-            resolve: require.resolve(
-              './src/plugins/gatsby-remark-autolink-headers',
-            ),
-          },
           {
             resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 1200,
             },
           },
+          { resolve: 'gatsby-remark-autolink-headers' },
         ],
       },
     },
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
     'gatsby-plugin-react-helmet',
-    {
-      resolve: require.resolve(
-        './src/plugins/gatsby-remark-autolink-headers',
-      ),
-    },
 
     // Source
     {
@@ -97,7 +108,15 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
+        path: `./pages/docs`,
+        name: 'doc',
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
         path: `./pages`,
+        ignore: ['**/docs/**'],
         name: 'page',
       },
     },

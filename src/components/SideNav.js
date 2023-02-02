@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStaticQuery, graphql, Link } from 'gatsby'
+import { useStaticQuery, graphql, Link, withPrefix } from 'gatsby'
 import styled from '@xstyled/styled-components'
 // eslint-disable-next-line import/no-unresolved
 import { useLocation } from '@reach/router'
@@ -55,6 +55,7 @@ const sortNodes = (a, b) => {
 
 const groupNodes = (nodes) =>
   nodes.reduce((groups, node) => {
+    if (!node.fields.title) return groups
     const group = createOrFindGroup(node.fields.section || 'Docs', groups)
     group.nodes.push(node)
     group.nodes.sort(sortNodes)
@@ -135,7 +136,9 @@ export function useSideNavState() {
 export function useSideNavPrevNext({ navGroups }) {
   const { pathname } = useLocation()
   const nodes = navGroups.flatMap((group) => group.nodes)
-  const nodeIndex = nodes.findIndex((node) => node.fields.slug === pathname)
+  const nodeIndex = nodes.findIndex(
+    (node) => withPrefix(node.fields.slug) === pathname,
+  )
   return {
     prev: nodeIndex > -1 ? nodes[nodeIndex - 1] : null,
     next: nodeIndex > -1 ? nodes[nodeIndex + 1] : null,

@@ -14,6 +14,7 @@ function createSchemaCustomization({ actions }) {
     type AlgoliaDocSearchMetadata {
       apiKey: String!
       indexName: String!
+      appId: String
     }
 
     type SiteSiteMetadata {
@@ -29,6 +30,7 @@ function createSchemaCustomization({ actions }) {
 
     type MdxFrontmatter {
       title: String!
+      description: String
       slug: String
       section: String
       order: Int
@@ -55,7 +57,7 @@ async function onPreBootstrap(options) {
 function onCreateMdxNode({ node, getNode, actions }, options) {
   const { createNodeField } = actions
   const slug = node.frontmatter.slug || createFilePath({ node, getNode })
-  const pageType = /\/pages\/docs\//.test(node.fileAbsolutePath)
+  const pageType = /\/pages\/docs\//.test(node.internal.contentFilePath)
     ? 'doc'
     : 'page'
 
@@ -131,7 +133,10 @@ function onCreateMdxNode({ node, getNode, actions }, options) {
     } = options
     const repositoryURL = githubRepositoryURL
     if (!baseDirectory || !repositoryURL) return ''
-    const relativePath = node.fileAbsolutePath.replace(baseDirectory, '')
+    const relativePath = node.internal.contentFilePath.replace(
+      baseDirectory,
+      '',
+    )
     return `${repositoryURL}/blob/${githubDefaultBranch}${relativePath}`
   }
 
@@ -143,7 +148,7 @@ function onCreateMdxNode({ node, getNode, actions }, options) {
 }
 
 function onCreateNode(...args) {
-  if (args[0].node.internal.type === `Mdx`) {
+  if (args[0].node.internal.type === 'Mdx') {
     onCreateMdxNode(...args)
   }
 }
@@ -167,6 +172,9 @@ async function createPages({ graphql, actions, reporter }) {
                 sourceInstanceName
               }
             }
+            internal {
+              contentFilePath
+            }
           }
         }
       }
@@ -175,6 +183,7 @@ async function createPages({ graphql, actions, reporter }) {
 
   if (errors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
+    console.log(errors)
     return
   }
 
@@ -197,16 +206,19 @@ async function createPages({ graphql, actions, reporter }) {
         toPath: node.fields.redirect,
         redirectInBrowser: true,
       })
+      return
     }
 
     createPage({
       path: node.fields.slug,
       component: path.resolve(
         __dirname,
-        `./src/templates/${node.fields.pageType}.js`,
+        `./src/templates/${node.fields.pageType}.js?__contentFilePath=${node.internal.contentFilePath}`,
       ),
       context: {
         id: node.id,
+        frontmatter: node.frontmatter,
+        contentFilePath: node.internal.contentFilePath,
       },
     })
   })
@@ -233,8 +245,22 @@ const pluginOptionsSchema = (/** @type {{ Joi: import('joi') }} */ { Joi }) => {
     docSearch: Joi.object({
       apiKey: Joi.string().required(),
       indexName: Joi.string().required(),
+      appId: Joi.string(),
     }),
     sitemap: Joi.object(),
+  })
+}
+
+const onCreateWebpackConfig = ({ stage, rules, loaders, plugins, actions }) => {
+  actions.setWebpackConfig({
+    module: {
+      rules: [
+        {
+          test: /\.mdx$/,
+          use: '@mdx-js/loader',
+        },
+      ],
+    },
   })
 }
 
@@ -244,4 +270,5 @@ module.exports = {
   onCreateNode,
   createPages,
   pluginOptionsSchema,
+  onCreateWebpackConfig,
 }
