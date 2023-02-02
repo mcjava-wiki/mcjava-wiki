@@ -2,13 +2,6 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'README.md'
-      - '.gitignore'
-      - 'licensing/**'
-      - '.github/workflows/**'
-      - '.nvmrc'
-
 
 jobs:
   publish:
