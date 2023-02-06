@@ -32,6 +32,9 @@ const Pre = styled.pre`
   hyphens: none;
   padding: 4 0;
 
+  -webkit-appearance: none;
+  -webkit-box-shadow: rgba(34, 211, 238, 0.20) 0px 0px 200px;
+  -moz-box-shadow: rgba(34, 211, 238, 0.20) 0px 0px 200px;
   box-shadow: rgba(34, 211, 238, 0.20) 0px 0px 200px;
 
   textarea {
