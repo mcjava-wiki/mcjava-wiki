@@ -1,8 +1,6 @@
 import React from 'react'
 import { PageLayout } from './PageLayout'
 import { DocLayout } from './DocLayout'
-import { withPrefix } from "gatsby"
-import Helmet from "react-helmet"
 
 export function PageWrapper({
   children,
@@ -10,7 +8,6 @@ export function PageWrapper({
     data: { mdx },
   },
 }) {
-  const isBrowser = typeof window !== 'undefined'
   if (!mdx?.fields?.pageType) return children
   switch (mdx.fields.pageType) {
     case 'doc':
@@ -21,9 +18,6 @@ export function PageWrapper({
           editLink={mdx.fields.editLink}
         >
           {children}
-          <Helmet>
-            {isBrowser && <script defer="defer" src={withPrefix('Contributors.js')} />}
-          </Helmet>
         </DocLayout>
       )
     case 'page':

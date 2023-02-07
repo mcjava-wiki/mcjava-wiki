@@ -1,6 +1,6 @@
 import React from 'react'
 import rangeParser from 'parse-numeric-range';
-import styled, { useTheme, th, up, css } from '@xstyled/styled-components'
+import styled, { useTheme, th, up, css, useColorMode } from '@xstyled/styled-components'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import {
   LiveProvider,
@@ -183,7 +183,8 @@ function importToRequire(code) {
 
 export function usePrismTheme() {
   const theme = useTheme()
-  return th('prism-theme')({ theme })
+  const [mode] = useColorMode()
+  return th(`prism-theme-${mode === 'light' ? 'light' : 'dark'}`)({ theme })
 }
 
 
