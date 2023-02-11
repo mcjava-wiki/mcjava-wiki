@@ -1,5 +1,6 @@
 import React from 'react'
-import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
+import { graphql, useStaticQuery } from 'gatsby'
+import styled, { x, css, up, down, th, useUp, marginRight } from '@xstyled/styled-components'
 import { useDialogState, Dialog, DialogDisclosure } from 'ariakit/dialog'
 import { Portal } from 'ariakit/portal'
 import { FaBars } from 'react-icons/fa'
@@ -11,6 +12,7 @@ import { SiblingNav, SiblingNavLink } from './SiblingNav'
 import { Article } from './Article'
 import { TableOfContents } from './TableOfContents'
 import { Contributors } from './Contributors'
+import { DocSearch } from './DocSearch'
 
 const SidebarDialog = styled.div`
   background-color: background-light-a50;
@@ -127,15 +129,33 @@ const MenuButton = styled.button`
   }
 `
 
+const DocSearchQuery = graphql`
+  query DocSearch {
+    site {
+      siteMetadata {
+        docSearch {
+          apiKey
+          indexName
+          appId
+        }
+      }
+    }
+  }
+`
+
 function MobileSidebar({ children }) {
   const dialog = useDialogState({ animated: true })
+  const data = useStaticQuery(DocSearchQuery)
   return (
     <>
       <Dialog state={dialog} as={SidebarDialog}>
+        <div style={{paddingLeft: 20, paddingTop: 20}}>
+        <DocSearch {...data.site.siteMetadata.docSearch} />
+        </div>
         {children}
       </Dialog>
       <Portal>
-      <DialogDisclosure state={dialog} as={MenuButton}>
+        <DialogDisclosure state={dialog} as={MenuButton}>
           <FaBars />
         </DialogDisclosure>
       </Portal>
