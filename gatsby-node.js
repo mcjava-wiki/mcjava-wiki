@@ -287,24 +287,10 @@ const pluginOptionsSchema = (/** @type {{ Joi: import('joi') }} */ { Joi }) => {
   })
 }
 
-const onCreateWebpackConfig = ({ stage, rules, loaders, plugins, actions }) => {
-  actions.setWebpackConfig({
-    module: {
-      rules: [
-        {
-          test: /\.mdx$/,
-          use: '@mdx-js/loader',
-        },
-      ],
-    },
-  })
-}
-
 module.exports = {
   createSchemaCustomization,
   onPreBootstrap,
   onCreateNode,
   createPages,
   pluginOptionsSchema,
-  onCreateWebpackConfig,
 }
