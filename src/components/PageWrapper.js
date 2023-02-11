@@ -16,6 +16,7 @@ export function PageWrapper({
           title={mdx.fields.title}
           tableOfContents={mdx.tableOfContents}
           editLink={mdx.fields.editLink}
+          contributors={mdx.fields.contributors}
         >
           {children}
         </DocLayout>

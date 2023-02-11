@@ -137,7 +137,7 @@ export function useSideNavPrevNext({ navGroups }) {
   const { pathname } = useLocation()
   const nodes = navGroups.flatMap((group) => group.nodes)
   const nodeIndex = nodes.findIndex(
-    (node) => withPrefix(node.fields.slug) === pathname,
+    (node) => withPrefix(`${node.fields.slug}/`) === pathname,
   )
   return {
     prev: nodeIndex > -1 ? nodes[nodeIndex - 1] : null,

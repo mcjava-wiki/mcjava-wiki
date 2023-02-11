@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 const { getSiteUrl } = require('./src/theme-options')
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
 
 function createSchemaCustomization({ actions }) {
   const { createTypes } = actions
@@ -54,12 +56,70 @@ async function onPreBootstrap(options) {
   createDirectoryIfNotExists(options, 'images')
 }
 
-function onCreateMdxNode({ node, getNode, actions }, options) {
+async function onCreateMdxNode({ node, getNode, actions }, options) {
+
   const { createNodeField } = actions
   const slug = node.frontmatter.slug || createFilePath({ node, getNode })
   const pageType = /\/pages\/docs\//.test(node.internal.contentFilePath)
     ? 'doc'
     : 'page'
+
+  function getOrderField() {
+    if (!Number.isNaN(Number(node.frontmatter.order))) {
+      return node.frontmatter.order
+    }
+    return -9999
+  }
+
+  const url = new URL(getSiteUrl(options))
+  url.pathname = slug
+
+  function getGithubLink(tld) {
+    const {
+      baseDirectory = path.resolve(__dirname, './'),
+      githubRepositoryURL = `https://github.${tld}/mcjava-wiki/mcjava-wiki`,
+      githubDefaultBranch = 'main',
+    } = options
+    const repositoryURL = githubRepositoryURL
+    if (!baseDirectory || !repositoryURL) return ''
+    const relativePath = node.internal.contentFilePath.replace(
+      baseDirectory,
+      '',
+    )
+    return `${repositoryURL}/contributors-list/${githubDefaultBranch}${relativePath}`
+  }
+
+  const getData = async (url) => {
+    const response = await fetch(url);
+    return response.text();
+  };
+  
+  const getContributors = async () => {
+    const contributorsHtml = await getData(getGithubLink('com'));
+    const $ = cheerio.load(await contributorsHtml);
+    const contributors = [];
+    $(".avatar").each((i, element) => {
+      const contributor = {};
+      const name = $(element).parent().attr('href').slice(1);
+      contributor.name = name ? name.trim() : '';
+      const link = $(element).attr('src');
+      contributor.link = link ? link : '';
+      contributors.push(contributor);
+    });
+  
+    return contributors;
+  };
+  
+  try {
+    const contributors = await getContributors();
+    createNodeField({
+      node,
+      name: 'contributors',
+      value: contributors,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 
   createNodeField({
     name: 'id',
@@ -103,21 +163,11 @@ function onCreateMdxNode({ node, getNode, actions }, options) {
     value: node.frontmatter.redirect || '',
   })
 
-  function getOrderField() {
-    if (!Number.isNaN(Number(node.frontmatter.order))) {
-      return node.frontmatter.order
-    }
-    return -9999
-  }
-
   createNodeField({
     name: 'order',
     node,
     value: getOrderField(),
   })
-
-  const url = new URL(getSiteUrl(options))
-  url.pathname = slug
 
   createNodeField({
     name: 'url',
@@ -125,31 +175,17 @@ function onCreateMdxNode({ node, getNode, actions }, options) {
     value: url.toString(),
   })
 
-  function getEditLink() {
-    const {
-      baseDirectory = path.resolve(__dirname, './'),
-      githubRepositoryURL = 'https://github.dev/mcjava-wiki/mcjava-wiki',
-      githubDefaultBranch = 'main',
-    } = options
-    const repositoryURL = githubRepositoryURL
-    if (!baseDirectory || !repositoryURL) return ''
-    const relativePath = node.internal.contentFilePath.replace(
-      baseDirectory,
-      '',
-    )
-    return `${repositoryURL}/blob/${githubDefaultBranch}${relativePath}`
-  }
-
   createNodeField({
     name: 'editLink',
     node,
-    value: getEditLink(),
+    value: getGithubLink('dev'),
   })
+
 }
 
-function onCreateNode(...args) {
+async function onCreateNode(...args) {
   if (args[0].node.internal.type === 'Mdx') {
-    onCreateMdxNode(...args)
+    await onCreateMdxNode(...args)
   }
 }
 

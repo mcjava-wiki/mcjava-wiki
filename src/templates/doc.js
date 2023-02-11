@@ -7,6 +7,10 @@ export const pageQuery = graphql`
         pageType
         title
         editLink
+        contributors {
+          link
+          name
+        }
       }
       tableOfContents
     }

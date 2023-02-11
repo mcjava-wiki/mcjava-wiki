@@ -3,13 +3,14 @@ import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
 import { useDialogState, Dialog, DialogDisclosure } from 'ariakit/dialog'
 import { Portal } from 'ariakit/portal'
 import { FaBars } from 'react-icons/fa'
-import { RiPencilLine } from 'react-icons/ri'
+import { RiEditCircleFill, RiGithubFill } from 'react-icons/ri'
 import { ScreenContainer } from './ScreenContainer'
 import { SideNav, useSideNavState, useSideNavPrevNext } from './SideNav'
 import { PageLayout } from './PageLayout'
 import { SiblingNav, SiblingNavLink } from './SiblingNav'
 import { Article } from './Article'
 import { TableOfContents } from './TableOfContents'
+import { Contributors } from './Contributors'
 
 const SidebarDialog = styled.div`
   background-color: background-light-a50;
@@ -142,9 +143,10 @@ function MobileSidebar({ children }) {
   )
 }
 
-function PrevNextLinks(props) {
+function PrevNextLinks({editLink, ...props}) {
   const { prev, next } = useSideNavPrevNext(props)
   if (!prev && !next) return null
+  console.log('PrevNextLinks editLink', editLink)
   return (
     <SiblingNav>
       {prev && (
@@ -152,16 +154,30 @@ function PrevNextLinks(props) {
           {prev.fields.title}
         </SiblingNavLink>
       )}
+      <div style={{gridArea: "edit", fontSize: 32}}>
+      {editLink && (
+        <x.a
+          mt={0}
+          display="grid"
+          gridTemplateColumns="min-content max-content"
+          href={editLink}
+        >
+        <RiEditCircleFill/><RiGithubFill/>
+        </x.a>
+      )}
+      </div>
       {next && (
         <SiblingNavLink type="next" to={next.fields.slug}>
           {next.fields.title}
         </SiblingNavLink>
       )}
     </SiblingNav>
+    
   )
 }
 
-export function DocLayout({ children, tableOfContents, editLink, ...props }) {
+export function DocLayout({ children, tableOfContents, editLink, contributors, ...props }) {
+  console.log('DocLayout editLink', editLink)
   const upMd = useUp('md')
   const sideNav = useSideNavState()
   return (
@@ -181,19 +197,8 @@ export function DocLayout({ children, tableOfContents, editLink, ...props }) {
           <x.div pb={6} px={3}>
             <Article>
               {children}
-              {editLink && (
-                <x.a
-                  mt={5}
-                  display="grid"
-                  gridTemplateColumns="min-content max-content"
-                  gridGap={1}
-                  alignItems="center"
-                  href={editLink}
-                >
-                  <RiPencilLine /> Edit this page on GitHub
-                </x.a>
-              )}
-              <PrevNextLinks {...sideNav} />
+              <Contributors contributors={contributors} />
+              <PrevNextLinks {...sideNav} editLink={editLink}/>
             </Article>
           </x.div>
           <TocContainer>
