@@ -74,7 +74,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   const url = new URL(getSiteUrl(options))
   url.pathname = slug
 
-  function getGithubLink(tld) {
+  function getGithubLink(tld, route) {
     const {
       baseDirectory = path.resolve(__dirname, './'),
       githubRepositoryURL = `https://github.${tld}/mcjava-wiki/mcjava-wiki`,
@@ -86,7 +86,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
       baseDirectory,
       '',
     )
-    return `${repositoryURL}/contributors-list/${githubDefaultBranch}${relativePath}`
+    return `${repositoryURL}${route}${githubDefaultBranch}${relativePath}`
   }
 
   const getData = async (url) => {
@@ -95,7 +95,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   };
   
   const getContributors = async () => {
-    const contributorsHtml = await getData(getGithubLink('com'));
+    const contributorsHtml = await getData(getGithubLink('com', '/contributors-list/'));
     const $ = cheerio.load(await contributorsHtml);
     const contributors = [];
     $(".avatar").each((i, element) => {
@@ -178,7 +178,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   createNodeField({
     name: 'editLink',
     node,
-    value: getGithubLink('dev'),
+    value: getGithubLink('dev', '/blob/'),
   })
 
 }
