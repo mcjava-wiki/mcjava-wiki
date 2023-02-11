@@ -18,7 +18,7 @@ export const ColorModeSwitcher = React.forwardRef((props, ref) => {
     <x.button
       ref={ref}
       type="button"
-      onClick={() => setMode(getInverseMode)}
+      onClick={() => setMode(getInverseMode(mode))}
       {...props}
     >
       <Icon style={{ width: 24, height: 24 }} />
