@@ -1,6 +1,6 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
-import styled, { x, css, up, down, th, useUp, marginRight } from '@xstyled/styled-components'
+import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
 import { useDialogState, Dialog, DialogDisclosure } from 'ariakit/dialog'
 import { Portal } from 'ariakit/portal'
 import { FaBars } from 'react-icons/fa'
