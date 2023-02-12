@@ -1,14 +1,19 @@
 import styled, { css, up, down } from '@xstyled/styled-components'
 
 export const Article = styled.article`
-  .anchor {
-    margin-left: calc(-1em - 4px);
-    > svg {
-      fill: on-background;
-      width: 1em;
-      height: 1em;
-      display: inline;
-      vertical-align: -15%;
+  .anchor.before {
+    position: relative;
+    left: 25px;
+    margin-left: -21px;
+    display: inline-block;
+    span {
+      svg {
+        fill: control-border;
+        transform: rotate(270deg);
+        &:hover {
+          fill: on-background;
+        }
+      }
     }
   }
 

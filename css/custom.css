@@ -3,6 +3,11 @@
   src: local('icomoon'), url(../static/fonts/icomoon.ttf) format('truetype');
 }
 
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top: 4rem;
+}
+
 pre[class*="language-"] {
     position: relative;
     -webkit-overflow-scrolling: touch;
