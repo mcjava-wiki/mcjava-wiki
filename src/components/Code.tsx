@@ -9,6 +9,7 @@ import {
   LivePreview as BaseLivePreview,
 } from 'react-live'
 import { FaClipboard } from 'react-icons/fa'
+import { langStyles } from '../util/constants';
 
 const Pre = styled.pre`
   position: relative;
@@ -70,8 +71,8 @@ const calculateLinesToHighlight = (meta: string) => {
 // code block title
 const CodeLabel = styled.button`
   position: absolute;
-  left: 0;
-  border-radius: 0 0 0.25rem 0rem;
+  left: -0.5rem;
+  border-radius: 0.25rem 0 0.25rem 0rem;
   font-size: 12px;
   letter-spacing: 0.025rem;
   padding: 0.25rem 0.5rem;
@@ -88,6 +89,37 @@ const getCodeTitle = (meta: string) => {
     return <CodeLabel>{codeTitle}</CodeLabel>
   } else {
     return () => false
+  }
+}
+
+
+const LanguageMarker = styled.button`
+  position: absolute;
+  right: -0.5rem;
+  border-radius: 0 0.25rem 0 0.25rem;
+  font-size: 10px;
+  letter-spacing: 0.025rem;
+  padding: 0.25rem 0.75rem;
+  text-align: right;
+  top: 0;
+  background: #ffffff;
+  color: #000000;
+`
+
+const getLanguageMarker = (className: string) => {
+  const lang = className.split(' ')[1]
+  if (lang === 'language-markup') {
+    return () => false
+  } else {
+    const Icon = langStyles[lang].icon;
+    return (
+        <LanguageMarker 
+          className={`lang-marker ${className}`} 
+          style={{ background: langStyles[lang].backgroundColor, color: langStyles[lang].textColor }}
+        >
+          <Icon style={{ display: 'inline-block', marginTop: -3, fontSize: 14 }}/>&nbsp;{langStyles[lang].shortName}
+        </LanguageMarker>
+      )
   }
 }
 
@@ -215,8 +247,8 @@ const copyToClipboard = (str: string) => {
 // setup cody copy button
 const CopyCode = styled.button`
   position: absolute;
-  right: 0;
-  border-radius: 0.25rem 0 0 0;
+  right: -0.5rem;
+  border-radius: 0.25rem 0 0.25rem 0;
   font-size: 12px;
   letter-spacing: 0.025rem;
   padding: 0.25rem 0.5rem;
@@ -236,7 +268,7 @@ const CopyCode = styled.button`
   }
 `
 
-export function Code({ children, lang = 'markup', metastring, meta }) {
+export function Code({ children, lang = 'markup', meta }) {
   const prismTheme = usePrismTheme() as PrismTheme;
 
   if (/live/.test(meta)) {
@@ -261,7 +293,7 @@ export function Code({ children, lang = 'markup', metastring, meta }) {
     )
   }
   const handleClick = () => { copyToClipboard(children.trim()) }
-  const shouldHighlightLine = calculateLinesToHighlight(metastring)
+  const shouldHighlightLine = calculateLinesToHighlight(meta)
   return (
     <Highlight
       {...defaultProps}
@@ -270,32 +302,35 @@ export function Code({ children, lang = 'markup', metastring, meta }) {
       theme={prismTheme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <Pre className={className} style={style}>
-        <div>
-        <>
-        {getCodeTitle(metastring)}
-        <div>
-          <CopyCode onClick={handleClick}><FaClipboard/></CopyCode>
-          <div>
-            {tokens.map((line, i) => {
-              const lineProps = getLineProps({ line, key: i })
-              if (shouldHighlightLine(i)) {
-                lineProps.className = `${lineProps.className} highlight-line`
-              }
-              return (
-                <div {...lineProps}>
-                  <LineNo>{i + 1}</LineNo>
-                  {line.map((token, key) => (
-                    <span {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              )
-            })}
-          </div>
+        <div style={{ position: 'relative' }}>
+          <>
+          <Pre className={className} style={style}>
+            <div>
+              <div>
+                {tokens.map((line, i) => {
+                  const lineProps = getLineProps({ line, key: i })
+                  if (shouldHighlightLine(i)) {
+                    lineProps.className = `${lineProps.className} highlight-line`
+                  }
+                  return (
+                    <div {...lineProps}>
+                      <LineNo>{i + 1}</LineNo>
+                      {line.map((token, key) => (
+                        <span {...getTokenProps({ token, key })} />
+                      ))}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </Pre>
+          <CopyCode onClick={handleClick}>
+            <FaClipboard />
+          </CopyCode>
+          {getCodeTitle(meta)}
+          {getLanguageMarker(className)}
+          </>
         </div>
-        </>
-        </div>
-      </Pre>
       )}
     </Highlight>
   )
