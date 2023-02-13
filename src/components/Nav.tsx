@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled, { x, th, down, css } from '@xstyled/styled-components'
-import internal from 'stream'
 
 export const Nav = styled.navBox`
   ${down(

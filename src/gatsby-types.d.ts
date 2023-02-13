@@ -2613,8 +2613,10 @@ type SiteSiteMetadata = {
   readonly author: Maybe<Scalars['String']>;
   readonly baseDirectory: Maybe<Scalars['String']>;
   readonly description: Scalars['String'];
+  readonly discordInviteCode: Maybe<Scalars['String']>;
   readonly docSearch: Maybe<AlgoliaDocSearchMetadata>;
   readonly githubDefaultBranch: Maybe<Scalars['String']>;
+  readonly githubRepository: Maybe<Scalars['String']>;
   readonly githubRepositoryURL: Maybe<Scalars['String']>;
   readonly navItems: Maybe<ReadonlyArray<NavItem>>;
   readonly sections: Maybe<ReadonlyArray<Scalars['String']>>;
@@ -2626,8 +2628,10 @@ type SiteSiteMetadataFieldSelector = {
   readonly author: InputMaybe<FieldSelectorEnum>;
   readonly baseDirectory: InputMaybe<FieldSelectorEnum>;
   readonly description: InputMaybe<FieldSelectorEnum>;
+  readonly discordInviteCode: InputMaybe<FieldSelectorEnum>;
   readonly docSearch: InputMaybe<AlgoliaDocSearchMetadataFieldSelector>;
   readonly githubDefaultBranch: InputMaybe<FieldSelectorEnum>;
+  readonly githubRepository: InputMaybe<FieldSelectorEnum>;
   readonly githubRepositoryURL: InputMaybe<FieldSelectorEnum>;
   readonly navItems: InputMaybe<NavItemFieldSelector>;
   readonly sections: InputMaybe<FieldSelectorEnum>;
@@ -2639,8 +2643,10 @@ type SiteSiteMetadataFilterInput = {
   readonly author: InputMaybe<StringQueryOperatorInput>;
   readonly baseDirectory: InputMaybe<StringQueryOperatorInput>;
   readonly description: InputMaybe<StringQueryOperatorInput>;
+  readonly discordInviteCode: InputMaybe<StringQueryOperatorInput>;
   readonly docSearch: InputMaybe<AlgoliaDocSearchMetadataFilterInput>;
   readonly githubDefaultBranch: InputMaybe<StringQueryOperatorInput>;
+  readonly githubRepository: InputMaybe<StringQueryOperatorInput>;
   readonly githubRepositoryURL: InputMaybe<StringQueryOperatorInput>;
   readonly navItems: InputMaybe<NavItemFilterListInput>;
   readonly sections: InputMaybe<StringQueryOperatorInput>;
@@ -2652,8 +2658,10 @@ type SiteSiteMetadataSortInput = {
   readonly author: InputMaybe<SortOrderEnum>;
   readonly baseDirectory: InputMaybe<SortOrderEnum>;
   readonly description: InputMaybe<SortOrderEnum>;
+  readonly discordInviteCode: InputMaybe<SortOrderEnum>;
   readonly docSearch: InputMaybe<AlgoliaDocSearchMetadataSortInput>;
   readonly githubDefaultBranch: InputMaybe<SortOrderEnum>;
+  readonly githubRepository: InputMaybe<SortOrderEnum>;
   readonly githubRepositoryURL: InputMaybe<SortOrderEnum>;
   readonly navItems: InputMaybe<NavItemSortInput>;
   readonly sections: InputMaybe<SortOrderEnum>;
@@ -2707,6 +2715,11 @@ type AppHeaderQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 type AppHeaderQuery = { readonly logos: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly publicURL: string | null }> }, readonly site: { readonly siteMetadata: { readonly title: string, readonly docSearch: { readonly apiKey: string, readonly indexName: string, readonly appId: string | null } | null, readonly navItems: ReadonlyArray<{ readonly title: string, readonly url: string }> | null } | null } | null };
+
+type AppNavQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type AppNavQuery = { readonly site: { readonly siteMetadata: { readonly githubRepository: string | null, readonly discordInviteCode: string | null } | null } | null };
 
 type DocPageQueryQueryVariables = Exact<{
   id: Scalars['String'];
@@ -2768,10 +2781,10 @@ type SideNavQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 type SideNavQueryQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly fields: { readonly title: string | null, readonly pageType: string | null, readonly section: string | null, readonly order: number | null, readonly slug: string | null } | null } }> }, readonly site: { readonly siteMetadata: { readonly sections: ReadonlyArray<string> | null } | null } | null };
 
-type MainQueryQueryVariables = Exact<{ [key: string]: never; }>;
+type CreatePagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type MainQueryQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly fields: { readonly slug: string | null, readonly pageType: string | null, readonly redirect: string | null } | null, readonly parent: { readonly sourceInstanceName: string } | {} | null, readonly internal: { readonly contentFilePath: string | null } } }> } };
+type CreatePagesQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly fields: { readonly slug: string | null, readonly pageType: string | null, readonly redirect: string | null } | null, readonly parent: { readonly sourceInstanceName: string } | {} | null, readonly internal: { readonly contentFilePath: string | null } } }> } };
 
 
 }

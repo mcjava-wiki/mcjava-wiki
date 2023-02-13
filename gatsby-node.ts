@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { createFilePath } from 'gatsby-source-filesystem';
 const { getSiteUrl } = require('./src/theme-options.ts')
+import { tlds, sites, routes } from './src/util/constants';
+const config = require('./gatsby-config.ts')
 import cheerio from 'cheerio';
 
 function createSchemaCustomization({ actions }) {
@@ -58,7 +60,6 @@ async function onPreBootstrap(options) {
 }
 
 async function onCreateMdxNode({ node, getNode, actions }, options) {
-
   const { createNodeField } = actions
   const slug = node.frontmatter.slug || createFilePath({ node, getNode })
   const pageType = /\/pages\/docs\//.test(node.internal.contentFilePath)
@@ -78,8 +79,8 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   function getGithubLink(tld: string, route: string) {
     const {
       baseDirectory = path.resolve(__dirname, './'),
-      githubRepositoryURL = `https://github.${tld}/mcjava-wiki/mcjava-wiki`,
-      githubDefaultBranch = 'main',
+      githubRepositoryURL = `https://${sites.GITHUB}.${tld}/${config.siteMetadata.githubRepository}`,
+      githubDefaultBranch = config.siteMetadata.githubDefaultBranch,
     } = options
     const repositoryURL = githubRepositoryURL
     if (!baseDirectory || !repositoryURL) return ''
@@ -101,7 +102,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   }
 
   const getContributors = async () => {
-    const contributorsHtml = await getData(getGithubLink('com', '/contributors-list/'));
+    const contributorsHtml = await getData(getGithubLink(tlds.COM, routes.CONTRIBUTORS_LIST));
     const $ = cheerio.load(contributorsHtml);
     
     const contributors: Contributor[] = [];
@@ -192,7 +193,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   createNodeField({
     name: 'editLink',
     node,
-    value: getGithubLink('dev', '/blob/'),
+    value: getGithubLink(tlds.DEV, routes.BLOB),
   })
 
 }
@@ -207,7 +208,7 @@ async function createPages({ graphql, actions, reporter }) {
   const { createPage, createRedirect } = actions
 
   const { data, errors } = await graphql(`
-    query MainQuery {
+    query CreatePages {
       allMdx {
         edges {
           node {

@@ -1,4 +1,4 @@
-const path = require('path')
+import path from 'path';
 
 const visit = require('unist-util-visit')
 
@@ -18,8 +18,9 @@ module.exports = {
   graphqlTypegen: true,
   siteMetadata: {
     title: "mcjava-wiki",
-    githubRepositoryURL: 'https://github.com/mcjava-wiki/mcjava-wiki',
+    githubRepository: 'mcjava-wiki/mcjava-wiki',
     githubDefaultBranch: 'main',
+    discordInviteCode: 'rqsKmmh89J',
     sections: [
       'About',
       'Basics',
