@@ -207,7 +207,7 @@ async function createPages({ graphql, actions, reporter }) {
   const { createPage, createRedirect } = actions
 
   const { data, errors } = await graphql(`
-    query {
+    query MainQuery {
       allMdx {
         edges {
           node {

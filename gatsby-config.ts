@@ -15,6 +15,7 @@ function rehypeMetaAsAttributes() {
 
 module.exports = {
   pathPrefix: `${process.env.PATH_PREFIX}`,
+  graphqlTypegen: true,
   siteMetadata: {
     title: "mcjava-wiki",
     githubRepositoryURL: 'https://github.com/mcjava-wiki/mcjava-wiki',

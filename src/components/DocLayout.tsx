@@ -197,7 +197,6 @@ function PrevNextLinks({ editLink, ...props }: { navGroups: any; } & { [x: strin
 }
 
 export function DocLayout({ children, tableOfContents, editLink, contributors, ...props }) {
-  console.log('DocLayout editLink', editLink)
   const upMd = useUp('md')
   const sideNav = useSideNavState()
   return (
