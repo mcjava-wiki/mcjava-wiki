@@ -8,7 +8,7 @@ const TOP_OFFSET = 100
 function getHeaderAnchors() {
   return Array.prototype.filter.call(
     document.getElementsByClassName('anchor'),
-    (testElement) =>
+    (testElement: { parentNode: { nodeName: string } }) =>
       testElement.parentNode.nodeName === 'H2' ||
       testElement.parentNode.nodeName === 'H3',
   )
@@ -28,7 +28,7 @@ function getAnchorHeaderIdentifier(el) {
 
 export function useTocHighlight(ref) {
   const { pathname } = useLocation()
-  const [lastActiveLink, setLastActiveLink] = React.useState(undefined)
+  const [lastActiveLink, setLastActiveLink] = React.useState<HTMLAnchorElement | undefined>(undefined)
   const [headings, setHeadings] = React.useState([])
 
   React.useEffect(() => {
@@ -36,13 +36,13 @@ export function useTocHighlight(ref) {
   }, [pathname])
 
   React.useEffect(() => {
-    let headersAnchors = []
-    let links = []
+    let headersAnchors: Element[] = []
+    let links: Element[] = []
 
     function setActiveLink() {
       function getActiveHeaderAnchor() {
         let index = 0
-        let activeHeaderAnchor = null
+        let activeHeaderAnchor: Element | null = null
 
         headersAnchors = getHeaderAnchors()
         while (index < headersAnchors.length && !activeHeaderAnchor) {
@@ -68,7 +68,7 @@ export function useTocHighlight(ref) {
         links = ref.current ? ref.current.querySelectorAll('a') : []
 
         while (index < links.length && !itemHighlighted) {
-          const link = links[index]
+          const link = links[index] as HTMLAnchorElement
           const { href } = link
           const anchorValue = decodeURIComponent(
             href.substring(href.indexOf('#') + 1),
@@ -76,7 +76,7 @@ export function useTocHighlight(ref) {
 
           if (getAnchorHeaderIdentifier(activeHeaderAnchor) === anchorValue) {
             if (lastActiveLink) {
-              lastActiveLink.removeAttribute('aria-current')
+              (lastActiveLink as HTMLElement).removeAttribute('aria-current')
             }
 
             link.setAttribute('aria-current', 'true')
@@ -156,14 +156,14 @@ const TocContainer = styled.div`
 `
 
 export function TableOfContents() {
-  const ref = React.useRef()
+  const ref = React.useRef<HTMLDivElement | null>(null)
   const headings = useTocHighlight(ref)
   if (!headings.length) return null
   return (
     <TocContainer ref={ref}>
       <h4>On this page</h4>
       <ul>
-        {headings.map((heading, i) =>
+        {headings.map((heading: { url: string; depth: number; text: string }, i) =>
           heading.url ? (
             <li key={i} data-depth={heading.depth}>
               <a href={heading.url}>{heading.text}</a>

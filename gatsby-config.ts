@@ -1,11 +1,11 @@
-const path = require('path')
+import path from 'path';
 
 const visit = require('unist-util-visit')
 
 /** @type {import('unified').Plugin<Array<void>, import('hast').Root>} */
 function rehypeMetaAsAttributes() {
-  return (tree) => {
-    visit(tree, 'element', (node) => {
+  return (tree: any) => {
+    visit(tree, 'element', (node: { tagName: string; data: { meta: any }; properties: { meta: any } }) => {
       if (node.tagName === 'code' && node.data && node.data.meta) {
         node.properties.meta = node.data.meta
       }
@@ -15,10 +15,12 @@ function rehypeMetaAsAttributes() {
 
 module.exports = {
   pathPrefix: `${process.env.PATH_PREFIX}`,
+  graphqlTypegen: true,
   siteMetadata: {
     title: "mcjava-wiki",
-    githubRepositoryURL: 'https://github.com/mcjava-wiki/mcjava-wiki',
+    githubRepository: 'mcjava-wiki/mcjava-wiki',
     githubDefaultBranch: 'main',
+    discordInviteCode: 'rqsKmmh89J',
     sections: [
       'About',
       'Basics',

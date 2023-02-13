@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@xstyled/styled-components'
 import { RiUserAddFill } from 'react-icons/ri'
+import { tlds, sites } from '../util/constants'
 
 const ContributorsContainer = styled.div`
   justify-content: center;
@@ -37,7 +38,7 @@ const ContributorsHeader = styled.div`
   border-color: layout-border;
 `
 
-export function Contributors(contributors) {
+export function Contributors(contributors: { contributors: any[] }) {
   return (
     <div>
       <ContributorsHeader>
@@ -45,7 +46,7 @@ export function Contributors(contributors) {
       </ContributorsHeader>
       <ContributorsContainer>
         {Array.isArray(contributors.contributors) && contributors.contributors.map((contributor) => (
-          <a key={contributor.name} href={`https://github.com/${contributor.name}`} target="_blank" rel="noopener noreferrer">
+          <a key={contributor.name} href={`https://${sites.GITHUB}.${tlds.COM}/${contributor.name}`} target="_blank" rel="noopener noreferrer">
             <ContributorImage src={contributor.link} alt={contributor.name} />
           </a>
         ))}

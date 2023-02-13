@@ -1,9 +1,23 @@
 import React from 'react'
+import { graphql, useStaticQuery } from 'gatsby'
 import { RiGithubFill, RiDiscordFill } from 'react-icons/ri'
 import { Nav, NavList, NavListItem, NavLink } from './Nav'
 import { ColorModeSwitcher } from './ColorModeSwitcher'
+import { tlds, sites } from '../util/constants'
+
+const AppNavQuery = graphql`
+  query AppNav {
+    site {
+      siteMetadata {
+        githubRepository
+        discordInviteCode
+      }
+    }
+  }
+`
 
 export function AppNav() {
+  const data = useStaticQuery(AppNavQuery)
   return (
     <Nav>
       <NavList>
@@ -13,7 +27,7 @@ export function AppNav() {
         <NavListItem>
             <NavLink
               as="a"
-              href="https://github.com/mcjava-wiki/mcjava-wiki"
+              href={`https://${sites.GITHUB}.${tlds.COM}/${data.site.siteMetadata.githubRepository}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -23,7 +37,7 @@ export function AppNav() {
         <NavListItem>
             <NavLink
               as="a"
-              href="https://discord.gg/rqsKmmh89J"
+              href={`https://${sites.DISCORD}.${tlds.GG}/${data.site.siteMetadata.discordInviteCode}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -31,7 +45,9 @@ export function AppNav() {
             </NavLink>
         </NavListItem>
         <NavListItem>
-          <NavLink as={ColorModeSwitcher} />
+          <NavLink 
+            as={ColorModeSwitcher} 
+          />
         </NavListItem>
       </NavList>
     </Nav>

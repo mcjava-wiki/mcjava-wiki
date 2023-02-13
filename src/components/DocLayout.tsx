@@ -163,7 +163,7 @@ function MobileSidebar({ children }) {
   )
 }
 
-function PrevNextLinks({editLink, ...props}) {
+function PrevNextLinks({ editLink, ...props }: { navGroups: any; } & { [x: string]: any; }) {
   const { prev, next } = useSideNavPrevNext(props)
   if (!prev && !next) return null
   console.log('PrevNextLinks editLink', editLink)
@@ -197,11 +197,10 @@ function PrevNextLinks({editLink, ...props}) {
 }
 
 export function DocLayout({ children, tableOfContents, editLink, contributors, ...props }) {
-  console.log('DocLayout editLink', editLink)
   const upMd = useUp('md')
   const sideNav = useSideNavState()
   return (
-    <PageLayout {...props}>
+    <PageLayout title={undefined} {...props}>
       <ScreenContainer px={0}>
         <Container>
           <SidebarSticky>

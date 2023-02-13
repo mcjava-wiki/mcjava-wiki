@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Ref } from 'react'
 import { Link } from 'gatsby'
 import styled from '@xstyled/styled-components'
 
@@ -22,12 +22,19 @@ export const InnerSiblingNavLink = styled.aBox`
   }
 `
 
+interface SiblingNavLinkProps {
+  type: string;
+  children: React.ReactNode;
+  to: string;
+}
+
 export const SiblingNavLink = React.forwardRef(
-  ({ type, children, ...props }, ref) => {
+  ({ type, children, to, ...props }: SiblingNavLinkProps, ref: any) => {
     return (
       <InnerSiblingNavLink
         ref={ref}
         as={Link}
+        to={to}
         data-type={type}
         gridArea={type}
         {...props}
@@ -36,9 +43,9 @@ export const SiblingNavLink = React.forwardRef(
         {children}
         {type === 'next' && ' →'}
       </InnerSiblingNavLink>
-    )
-  },
-)
+    );
+  }
+);
 
 export const SiblingNav = styled.navBox`
   display: grid;

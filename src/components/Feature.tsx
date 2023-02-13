@@ -11,7 +11,7 @@ const InnerFeature = styled.box`
   padding-right: 5 !important;
 `
 
-export const Feature = React.forwardRef((props, ref) => (
+export const Feature = React.forwardRef((props, ref: any) => (
   <InnerFeature
     ref={ref}
     col={{ xs: 1, md: 1 / 4 }}
@@ -43,15 +43,15 @@ const InnerFeatureImage = styled.img`
   margin-top: 3;
 `
 
-export const FeatureImage = React.forwardRef((props, ref) => (
+export const FeatureImage = React.forwardRef((props, ref: any) => (
   <InnerFeatureImage ref={ref} width={48} height={48} {...props} />
 ))
 
-export const FeatureList = React.forwardRef((props, ref) => (
+export const FeatureList = React.forwardRef((props, ref: any) => (
   <ScreenContainer ref={ref} row my={-4} px={3} {...props} />
 ))
 
-export const FeatureSection = React.forwardRef((props, ref) => (
+export const FeatureSection = React.forwardRef((props, ref: any) => (
   <x.section
     ref={ref}
     py={4}

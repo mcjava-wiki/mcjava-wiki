@@ -1,9 +1,12 @@
-const fs = require('fs')
-const path = require('path')
-const { createFilePath } = require('gatsby-source-filesystem')
-const { getSiteUrl } = require('./src/theme-options')
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
+import { CreateNodeArgs } from "gatsby";
+
+import fs from 'fs';
+import path from 'path';
+import { createFilePath } from 'gatsby-source-filesystem';
+const { getSiteUrl } = require('./src/theme-options.ts')
+import { tlds, sites, routes } from './src/util/constants';
+const config = require('./gatsby-config.ts')
+import cheerio from 'cheerio';
 
 function createSchemaCustomization({ actions }) {
   const { createTypes } = actions
@@ -57,7 +60,6 @@ async function onPreBootstrap(options) {
 }
 
 async function onCreateMdxNode({ node, getNode, actions }, options) {
-
   const { createNodeField } = actions
   const slug = node.frontmatter.slug || createFilePath({ node, getNode })
   const pageType = /\/pages\/docs\//.test(node.internal.contentFilePath)
@@ -74,11 +76,11 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   const url = new URL(getSiteUrl(options))
   url.pathname = slug
 
-  function getGithubLink(tld, route) {
+  function getGithubLink(tld: string, route: string) {
     const {
       baseDirectory = path.resolve(__dirname, './'),
-      githubRepositoryURL = `https://github.${tld}/mcjava-wiki/mcjava-wiki`,
-      githubDefaultBranch = 'main',
+      githubRepositoryURL = `https://${sites.GITHUB}.${tld}/${config.siteMetadata.githubRepository}`,
+      githubDefaultBranch = config.siteMetadata.githubDefaultBranch,
     } = options
     const repositoryURL = githubRepositoryURL
     if (!baseDirectory || !repositoryURL) return ''
@@ -89,22 +91,35 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
     return `${repositoryURL}${route}${githubDefaultBranch}${relativePath}`
   }
 
-  const getData = async (url) => {
+  const getData = async (url: URL | RequestInfo) => {
     const response = await fetch(url);
     return response.text();
   };
   
+  interface Contributor {
+    name: string;
+    link: string;
+  }
+
   const getContributors = async () => {
-    const contributorsHtml = await getData(getGithubLink('com', '/contributors-list/'));
-    const $ = cheerio.load(await contributorsHtml);
-    const contributors = [];
-    $(".avatar").each((i, element) => {
-      const contributor = {};
-      const name = $(element).parent().attr('href').slice(1);
-      contributor.name = name ? name.trim() : '';
-      const link = $(element).attr('src');
-      contributor.link = link ? link : '';
-      contributors.push(contributor);
+    const contributorsHtml = await getData(getGithubLink(tlds.COM, routes.CONTRIBUTORS_LIST));
+    const $ = cheerio.load(contributorsHtml);
+    
+    const contributors: Contributor[] = [];
+    $(".avatar").each((_i: any, element: any) => {
+      const href = $(element).parent().attr('href');
+      if (href) {
+        const name = href.slice(1);
+        const link = $(element).attr('src');
+        const contributor: Contributor = {
+          name: name ? name.trim() : '',
+          link: link ? link : ''
+        };
+        
+        contributor.name = name ? name.trim() : '';
+        contributor.link = link ? link : '';
+        contributors.push(contributor);
+      }
     });
   
     return contributors;
@@ -178,14 +193,14 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   createNodeField({
     name: 'editLink',
     node,
-    value: getGithubLink('dev', '/blob/'),
+    value: getGithubLink(tlds.DEV, routes.BLOB),
   })
 
 }
 
-async function onCreateNode(...args) {
+async function onCreateNode(...args: [CreateNodeArgs]) {
   if (args[0].node.internal.type === 'Mdx') {
-    await onCreateMdxNode(...args)
+    await onCreateMdxNode(...args, {})
   }
 }
 
@@ -193,7 +208,7 @@ async function createPages({ graphql, actions, reporter }) {
   const { createPage, createRedirect } = actions
 
   const { data, errors } = await graphql(`
-    query {
+    query CreatePages {
       allMdx {
         edges {
           node {
@@ -223,11 +238,11 @@ async function createPages({ graphql, actions, reporter }) {
     return
   }
 
-  const filteredEdges = data.allMdx.edges.filter((edge) => {
+  const filteredEdges = data.allMdx.edges.filter((edge: { node: { parent: { sourceInstanceName: string; }; fields: { slug: any; }; }; }) => {
     if (edge.node.parent.sourceInstanceName === 'default-page') {
       const { slug } = edge.node.fields
       const hasCustom404 = data.allMdx.edges.find(
-        (_edge) => edge !== _edge && _edge.node.fields.slug === slug,
+        (_edge: { node: any; }) => edge !== _edge && _edge.node.fields.slug === slug,
       )
       return !hasCustom404
     }
@@ -249,7 +264,7 @@ async function createPages({ graphql, actions, reporter }) {
       path: node.fields.slug,
       component: path.resolve(
         __dirname,
-        `./src/templates/${node.fields.pageType}.js?__contentFilePath=${node.internal.contentFilePath}`,
+        `./src/templates/${node.fields.pageType}.ts?__contentFilePath=${node.internal.contentFilePath}`,
       ),
       context: {
         id: node.id,

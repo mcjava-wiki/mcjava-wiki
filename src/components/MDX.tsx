@@ -6,7 +6,7 @@ import { Table, TableContainer } from './Table'
 function transformCode({ children, className, ...props }) {
   const lang = className && className.split('-')[1]
   return (
-    <Code lang={lang} {...props}>
+    <Code metastring={undefined} meta={undefined} lang={lang} {...props}>
       {children}
     </Code>
   )
@@ -16,14 +16,18 @@ function getCodeChild(children) {
   const childrenArray = React.Children.toArray(children)
   if (childrenArray.length !== 1) return null
   const [firstChild] = childrenArray
+  if (!React.isValidElement(firstChild)) return null
   if (firstChild.type !== 'code') return null
   return firstChild
 }
 
 export const mdxComponents = {
   pre: ({ children }) => {
-    const codeChild = getCodeChild(children)
-    return codeChild ? transformCode(codeChild.props) : <pre>{children}</pre>
+    const codeChild: any = getCodeChild(children)
+    if (codeChild) {
+      return transformCode(codeChild.props)
+    }
+    return <pre>{children}</pre>
   },
   table: ({ children }) => {
     return (
