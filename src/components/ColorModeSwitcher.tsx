@@ -11,7 +11,7 @@ function getInverseMode(mode: 'light' | 'dark') {
   return mode === 'light' ? 'dark' : 'light'
 }
 
-export const ColorModeSwitcher = React.forwardRef((props, ref: any) => {
+export const ColorModeSwitcher = React.forwardRef((props, ref: React.Ref<HTMLButtonElement>) => {
   const [mode, setMode] = useColorMode() as ['light' | 'dark', (mode: 'light' | 'dark') => void]
   const Icon = modeIcons[mode]
   return (

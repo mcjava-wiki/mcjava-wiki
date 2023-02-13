@@ -12,8 +12,9 @@ import {
     AiOutlineFunction
 } from 'react-icons/ai'
 import { VscBracketDot } from 'react-icons/vsc'
+import { IconType } from 'react-icons'
 
-export const tlds = {
+export const tlds: {[key: string]: string} = {
     'COM': 'com',
     'NET': 'net',
     'ORG': 'org',
@@ -24,17 +25,24 @@ export const tlds = {
     'GG': 'gg',
 }
 
-export const sites = {
+export const sites: {[key: string]: string} = {
     'GITHUB': 'github',
     'DISCORD': 'discord',
 }
 
-export const routes = {
+export const routes: {[key: string]: string} = {
     'BLOB': '/blob/',
     'CONTRIBUTORS_LIST': '/contributors-list/',
 }
 
-export const langStyles = {
+interface LangStyle {
+    shortName: string;
+    backgroundColor: string;
+    textColor: string;
+    icon: IconType
+}
+
+export const langStyles: { [key: string]: LangStyle } = {
     'language-javascript': {
         shortName: 'JS',
         backgroundColor: "#f7df1e",

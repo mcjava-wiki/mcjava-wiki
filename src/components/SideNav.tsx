@@ -117,18 +117,22 @@ const NavGroupMenuItem = styled.li`
   }
 `
 
-const sortGroupsWithConfig = (section: string | any[]) => (a: { name: string }, b: { name: string }) => {
-  const indexA = section.indexOf(a.name)
-  const indexB = section.indexOf(b.name)
+const sortGroupsWithConfig = (section: readonly string[] | null) => (a: { name: string }, b: { name: string }) => {
+  if (!section) return 0;
+  const indexA: number = section.indexOf(a.name)
+  const indexB: number = section.indexOf(b.name)
   const diff = indexA - indexB
   return diff === 0 ? 0 : diff < 0 ? -1 : 1
 }
 
 export function useSideNavState() {
-  const data = useStaticQuery(SideNavQuery)
+  const data: Queries.SideNavQueryQuery = useStaticQuery(SideNavQuery)
   return React.useMemo(() => {
     const navGroups = groupNodes(data.allMdx.edges.map((edge) => edge.node))
-    navGroups.sort(sortGroupsWithConfig(data.site.siteMetadata.sections))
+    if ( !data.site ) return;
+    const siteMetadata = data.site.siteMetadata;
+    if (!siteMetadata) return;
+    navGroups.sort(sortGroupsWithConfig(siteMetadata.sections))
     return { navGroups }
   }, [data])
 }

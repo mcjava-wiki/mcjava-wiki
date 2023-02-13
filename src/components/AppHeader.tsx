@@ -96,7 +96,7 @@ function useLogo(logos) {
 }
 
 export function AppHeader() {
-  const data = useStaticQuery(AppHeaderQuery)
+  const data: Queries.AppHeaderQuery = useStaticQuery(AppHeaderQuery)
   const logo = useLogo(data.logos.nodes)
 
   return (
@@ -121,7 +121,7 @@ export function AppHeader() {
                   px={2}
                   height={32}
                   src={logo.publicURL}
-                  alt={data.site.siteMetadata.title}
+                  alt={data?.site?.siteMetadata?.title}
                 />
               ) : (
                 <x.h2
@@ -132,12 +132,12 @@ export function AppHeader() {
                   fontSize={18}
                   m={0}
                 >
-                  {data.site.siteMetadata.title}
+                  {data?.site?.siteMetadata?.title}
                 </x.h2>
               )}
             </NavLink>
           </x.div>
-          {data.site.siteMetadata.docSearch ? (
+          {data?.site?.siteMetadata?.docSearch ? (
             <x.div col="auto" px={2} display={{ xs: 'none', md: 'block' }}>
               <DocSearch {...data.site.siteMetadata.docSearch} />
             </x.div>

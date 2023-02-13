@@ -46,8 +46,8 @@ type NavLinkProps = {
   rel?: string;
 };
 
-export const NavLink = React.forwardRef((props: NavLinkProps, ref: any) => {
-  return <InnerNavLink ref={ref} as={Link} {...props} />
+export const NavLink = React.forwardRef((props: NavLinkProps, ref: React.Ref<HTMLAnchorElement>) => {
+  return <InnerNavLink innerRef={ref} as={Link} {...props} />
 })
 
 export const NavListItem = styled.liBox`
@@ -63,7 +63,7 @@ type NavListProps = {
   children: React.ReactNode;
 };
 
-export const NavList = React.forwardRef((props: NavListProps, ref: any) => {
+export const NavList = React.forwardRef((props: NavListProps, ref: React.Ref<HTMLUListElement>) => {
   return (
     <x.ul
       ref={ref}

@@ -71,7 +71,7 @@ interface ButtonProps {
 }
 
 export const Button = React.forwardRef(
-  ({ variant = 'primary', children, ...props }: ButtonProps, ref: any) => {
+  ({ variant = 'primary', children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
     return (
       <AriakitButton ref={ref} data-variant={variant}>
         {(buttonProps) => (

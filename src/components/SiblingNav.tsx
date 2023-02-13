@@ -29,10 +29,10 @@ interface SiblingNavLinkProps {
 }
 
 export const SiblingNavLink = React.forwardRef(
-  ({ type, children, to, ...props }: SiblingNavLinkProps, ref: any) => {
+  ({ type, children, to, ...props }: SiblingNavLinkProps, ref: React.Ref<HTMLAnchorElement>) => {
     return (
       <InnerSiblingNavLink
-        ref={ref}
+        innerRef={ref}
         as={Link}
         to={to}
         data-type={type}

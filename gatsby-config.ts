@@ -1,4 +1,5 @@
 import path from 'path';
+import type { GatsbyConfig } from "gatsby";
 
 const visit = require('unist-util-visit')
 
@@ -13,7 +14,7 @@ function rehypeMetaAsAttributes() {
   }
 }
 
-module.exports = {
+const config: GatsbyConfig = {
   pathPrefix: `${process.env.PATH_PREFIX}`,
   graphqlTypegen: true,
   siteMetadata: {
@@ -168,3 +169,5 @@ module.exports = {
     },
   ],
 }
+
+export default config;

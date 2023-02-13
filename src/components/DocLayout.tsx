@@ -145,12 +145,19 @@ const DocSearchQuery = graphql`
 
 function MobileSidebar({ children }) {
   const dialog = useDialogState({ animated: true })
-  const data = useStaticQuery(DocSearchQuery)
+  const data: Queries.DocSearchQuery = useStaticQuery(DocSearchQuery)
+  if (!data.site || !data.site.siteMetadata) return null;
+  const docSearch = data.site.siteMetadata.docSearch;
+  if (!docSearch) return null;
   return (
     <>
       <Dialog state={dialog} as={SidebarDialog}>
         <div style={{paddingLeft: 20, paddingTop: 20}}>
-        <DocSearch {...data.site.siteMetadata.docSearch} />
+        <DocSearch 
+          apiKey={docSearch.apiKey}
+          indexName={docSearch.indexName}
+          appId={docSearch.appId}
+        />
         </div>
         {children}
       </Dialog>
@@ -198,7 +205,7 @@ function PrevNextLinks({ editLink, ...props }: { navGroups: any; } & { [x: strin
 
 export function DocLayout({ children, tableOfContents, editLink, contributors, ...props }) {
   const upMd = useUp('md')
-  const sideNav = useSideNavState()
+  const sideNav: any = useSideNavState()
   return (
     <PageLayout title={undefined} {...props}>
       <ScreenContainer px={0}>

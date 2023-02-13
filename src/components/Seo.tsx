@@ -34,13 +34,13 @@ const SEOQuery = graphql`
 `
 
 export function Seo({ title }) {
-  const data = useStaticQuery(SEOQuery)
-  const metaDescription = data.site.siteMetadata.description
-  const metaTitle = title || data.site.siteMetadata.title
-  const url = data.site.siteMetadata.siteUrl
+  const data: Queries.SEOQueryQuery = useStaticQuery(SEOQuery)
+  const metaDescription = data?.site?.siteMetadata?.description
+  const metaTitle = title || data?.site?.siteMetadata?.title
+  const url = data?.site?.siteMetadata?.siteUrl
   const socialImage = data.defaultSocialImage || data.socialImage
   const image = socialImage
-    ? url + socialImage.childImageSharp.gatsbyImageData.images.fallback.src
+    ? ((url ? url : '') + socialImage?.childImageSharp?.gatsbyImageData?.images?.fallback?.src)
     : null
   return (
     <Helmet
@@ -86,7 +86,7 @@ export function Seo({ title }) {
 
         {
           name: 'twitter:creator',
-          content: data.site.siteMetadata.author,
+          content: data?.site?.siteMetadata?.author,
         },
         {
           name: 'twitter:title',

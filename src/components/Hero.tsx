@@ -72,7 +72,7 @@ const InnerHero = styled(ScreenContainer)`
 `
 
 export const Hero = React.forwardRef(
-  ({ backgroundImageURL, ...props }: { backgroundImageURL?: string }, ref: any) => {
+  ({ backgroundImageURL, ...props }: { backgroundImageURL?: string }, ref: React.Ref<HTMLDivElement>) => {
     if (typeof backgroundImageURL === 'undefined') {
       return <InnerHero ref={ref} {...props} />
     }
@@ -87,7 +87,7 @@ export const Hero = React.forwardRef(
   },
 )
 
-export const HeroBody = React.forwardRef((props, ref: any) => {
+export const HeroBody = React.forwardRef((props, ref: React.Ref<HTMLDivElement>) => {
   return <x.div ref={ref} w={{ md: 0.5 }} {...props} />
 })
 
@@ -97,7 +97,7 @@ export const HeroSection = styled.sectionBox`
   padding-bottom: 5;
 `
 
-export const HeroActionList = React.forwardRef((props, ref: any) => {
+export const HeroActionList = React.forwardRef((props, ref: React.Ref<HTMLDivElement>) => {
   return (
     <x.div
       ref={ref}
@@ -109,6 +109,6 @@ export const HeroActionList = React.forwardRef((props, ref: any) => {
   )
 })
 
-export const HeroAction = React.forwardRef((props, ref: any) => {
+export const HeroAction = React.forwardRef((props, ref: React.Ref<HTMLDivElement>) => {
   return <x.div ref={ref} col="auto" p={2} {...props} />
 })
