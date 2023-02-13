@@ -4,8 +4,8 @@ const visit = require('unist-util-visit')
 
 /** @type {import('unified').Plugin<Array<void>, import('hast').Root>} */
 function rehypeMetaAsAttributes() {
-  return (tree) => {
-    visit(tree, 'element', (node) => {
+  return (tree: any) => {
+    visit(tree, 'element', (node: { tagName: string; data: { meta: any }; properties: { meta: any } }) => {
       if (node.tagName === 'code' && node.data && node.data.meta) {
         node.properties.meta = node.data.meta
       }

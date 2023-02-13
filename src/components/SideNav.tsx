@@ -53,7 +53,7 @@ const sortNodes = (a, b) => {
   return diff === 0 ? 0 : diff > 0 ? 1 : -1
 }
 
-const groupNodes = (nodes) =>
+const groupNodes = (nodes: any[]) =>
   nodes.reduce((groups, node) => {
     if (!node.fields.title) return groups
     const group = createOrFindGroup(node.fields.section || 'Docs', groups)
@@ -117,7 +117,7 @@ const NavGroupMenuItem = styled.li`
   }
 `
 
-const sortGroupsWithConfig = (section) => (a, b) => {
+const sortGroupsWithConfig = (section: string | any[]) => (a: { name: string }, b: { name: string }) => {
   const indexA = section.indexOf(a.name)
   const indexB = section.indexOf(b.name)
   const diff = indexA - indexB
@@ -135,9 +135,9 @@ export function useSideNavState() {
 
 export function useSideNavPrevNext({ navGroups }) {
   const { pathname } = useLocation()
-  const nodes = navGroups.flatMap((group) => group.nodes)
+  const nodes = navGroups.flatMap((group: { nodes: any }) => group.nodes)
   const nodeIndex = nodes.findIndex(
-    (node) => withPrefix(`${node.fields.slug}/`) === pathname,
+    (node: { fields: { slug: any } }) => withPrefix(`${node.fields.slug}/`) === pathname,
   )
   return {
     prev: nodeIndex > -1 ? nodes[nodeIndex - 1] : null,

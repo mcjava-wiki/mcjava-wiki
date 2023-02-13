@@ -7,12 +7,12 @@ const modeIcons = {
   dark: RiSunLine,
 }
 
-function getInverseMode(mode) {
+function getInverseMode(mode: 'light' | 'dark') {
   return mode === 'light' ? 'dark' : 'light'
 }
 
-export const ColorModeSwitcher = React.forwardRef((props, ref) => {
-  const [mode, setMode] = useColorMode()
+export const ColorModeSwitcher = React.forwardRef((props, ref: any) => {
+  const [mode, setMode] = useColorMode() as ['light' | 'dark', (mode: 'light' | 'dark') => void]
   const Icon = modeIcons[mode]
   return (
     <x.button

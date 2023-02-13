@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled, { x, th, down, css } from '@xstyled/styled-components'
+import internal from 'stream'
 
 export const Nav = styled.navBox`
   ${down(
@@ -32,7 +33,21 @@ const InnerNavLink = styled.aBox`
   padding: 0;
 `
 
-export const NavLink = React.forwardRef((props, ref) => {
+type NavLinkProps = {
+  children?: React.ReactNode;
+  display?: string;
+  alignItems?: string;
+  flexWrap?: string;
+  mx?: number;
+  row?: boolean;
+  to?: string;
+  as?: string | React.ComponentType;
+  href?: string;
+  target?: string;
+  rel?: string;
+};
+
+export const NavLink = React.forwardRef((props: NavLinkProps, ref: any) => {
   return <InnerNavLink ref={ref} as={Link} {...props} />
 })
 
@@ -45,7 +60,11 @@ export const NavListItem = styled.liBox`
   align-items: center;
 `
 
-export const NavList = React.forwardRef((props, ref) => {
+type NavListProps = {
+  children: React.ReactNode;
+};
+
+export const NavList = React.forwardRef((props: NavListProps, ref: any) => {
   return (
     <x.ul
       ref={ref}

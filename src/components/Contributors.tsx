@@ -37,7 +37,7 @@ const ContributorsHeader = styled.div`
   border-color: layout-border;
 `
 
-export function Contributors(contributors) {
+export function Contributors(contributors: { contributors: any[] }) {
   return (
     <div>
       <ContributorsHeader>

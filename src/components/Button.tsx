@@ -65,8 +65,13 @@ const InnerButton = styled.buttonBox`
   }
 `
 
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  children: React.ReactNode;
+}
+
 export const Button = React.forwardRef(
-  ({ variant = 'primary', children, ...props }, ref) => {
+  ({ variant = 'primary', children, ...props }: ButtonProps, ref: any) => {
     return (
       <AriakitButton ref={ref} data-variant={variant}>
         {(buttonProps) => (

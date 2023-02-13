@@ -9,7 +9,7 @@ export function RootWrapper({ children }) {
       <ColorModeProvider>
         <Preflight />
         <GlobalStyle />
-        <MDXProvider>{children}</MDXProvider>
+        <MDXProvider components={undefined}>{children}</MDXProvider>
       </ColorModeProvider>
     </ThemeProvider>
   )

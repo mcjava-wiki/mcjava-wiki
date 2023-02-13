@@ -1,7 +1,7 @@
 import React from 'react'
 import rangeParser from 'parse-numeric-range';
 import styled, { useTheme, th, up, css, useColorMode } from '@xstyled/styled-components'
-import Highlight, { defaultProps } from 'prism-react-renderer'
+import Highlight, { defaultProps, Language, PrismTheme } from 'prism-react-renderer'
 import {
   LiveProvider,
   LiveEditor,
@@ -55,12 +55,13 @@ const Pre = styled.pre`
 `
 
 // line highlighting
-const calculateLinesToHighlight = (meta) => {
+const calculateLinesToHighlight = (meta: string) => {
   const REhighlights = /highlights={([\d,-]+)}/
-  if (REhighlights.test(meta)) {
-    const strlineNumbers = REhighlights.exec(meta)[1]
+  const match = REhighlights.exec(meta)
+  if (match) {
+    const strlineNumbers = match[1]
     const lineNumbers = rangeParser(strlineNumbers)
-    return (index) => (lineNumbers.includes(index + 1))
+    return (index: number) => (lineNumbers.includes(index + 1))
   } else {
     return () => false
   }
@@ -79,10 +80,11 @@ const CodeLabel = styled.button`
   background: #0891B2;
   color: #ffffff;
 `
-const getCodeTitle = (meta) => {
+const getCodeTitle = (meta: string) => {
   const REtitle = /title={(.*?)}/
-  if (REtitle.test(meta)) {
-    const codeTitle = REtitle.exec(meta)[1]
+  const match = REtitle.exec(meta)
+  if (match) {
+    const codeTitle = match[1]
     return <CodeLabel>{codeTitle}</CodeLabel>
   } else {
     return () => false
@@ -139,7 +141,7 @@ export function LiveConfig({ modules }) {
   return null
 }
 
-function req(path) {
+function req(path: string | number) {
   const dep = globalModules[path]
 
   if (!dep) {
@@ -150,7 +152,7 @@ function req(path) {
   return dep
 }
 
-function importToRequire(code) {
+function importToRequire(code: string) {
   return (
     code
       // { a as b } => { a: b }
@@ -181,15 +183,24 @@ function importToRequire(code) {
   )
 }
 
-export function usePrismTheme() {
-  const theme = useTheme()
-  const [mode] = useColorMode()
-  return th(`prism-theme-${mode === 'light' ? 'light' : 'dark'}`)({ theme })
+export function usePrismTheme(): PrismTheme {
+  const theme = useTheme();
+  const [mode] = useColorMode();
+  const prismTheme = th(`prism-theme-${mode === 'light' ? 'light' : 'dark'}`)({ theme });
+
+  if (typeof prismTheme !== 'object') {
+    return {
+      plain: {},
+      styles: []
+    };
+  }
+
+  return prismTheme;
 }
 
 
 // setup clipboard copy function
-const copyToClipboard = (str) => {
+const copyToClipboard = (str: string) => {
   const el = document.createElement("textarea")
   el.value = str
   el.setAttribute("readonly", "")
@@ -226,14 +237,15 @@ const CopyCode = styled.button`
 `
 
 export function Code({ children, lang = 'markup', metastring, meta }) {
-  const prismTheme = usePrismTheme()
+  const prismTheme = usePrismTheme() as PrismTheme;
+
   if (/live/.test(meta)) {
     return (
       <LiveProvider
         code={children.trim()}
         transformCode={(code) => `${importToRequire(code)}`}
         scope={{ require: req }}
-        language={lang}
+        language={lang as Language}
         theme={prismTheme}
         noInline={/noInline/.test(meta)}
       >
@@ -242,7 +254,7 @@ export function Code({ children, lang = 'markup', metastring, meta }) {
           as="div"
           style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
         >
-          <LiveEditor padding={0} />
+          <LiveEditor />
         </Pre>
         <LiveError />
       </LiveProvider>
@@ -254,30 +266,36 @@ export function Code({ children, lang = 'markup', metastring, meta }) {
     <Highlight
       {...defaultProps}
       code={children.trim()}
-      language={lang}
+      language={lang as Language}
       theme={prismTheme}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <Pre className={className} style={style}>
-          {getCodeTitle(metastring)}
-          <div>
+        <div>
+        <>
+        {getCodeTitle(metastring)}
+        <div>
           <CopyCode onClick={handleClick}><FaClipboard/></CopyCode>
-          {tokens.map((line, i) => {
-            const lineProps = getLineProps({ line, key: i })
-            if (shouldHighlightLine(i)) {
-              lineProps.className = `${lineProps.className} highlight-line`
-            }
-            return (
-            <div {...lineProps}>
-              <LineNo>{i + 1}</LineNo>
-              {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-            )
-          })}
+          <div>
+            {tokens.map((line, i) => {
+              const lineProps = getLineProps({ line, key: i })
+              if (shouldHighlightLine(i)) {
+                lineProps.className = `${lineProps.className} highlight-line`
+              }
+              return (
+                <div {...lineProps}>
+                  <LineNo>{i + 1}</LineNo>
+                  {line.map((token, key) => (
+                    <span {...getTokenProps({ token, key })} />
+                  ))}
+                </div>
+              )
+            })}
           </div>
-        </Pre>
+        </div>
+        </>
+        </div>
+      </Pre>
       )}
     </Highlight>
   )

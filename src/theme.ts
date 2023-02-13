@@ -2,9 +2,9 @@ import customThemeDark from 'prism-react-renderer/themes/nightOwl'
 import customThemeLight from 'prism-react-renderer/themes/nightOwlLight'
 
 import { transparentize } from 'polished'
-import { css, th, defaultTheme, aliasColor } from '@xstyled/styled-components'
+import { css, th, defaultTheme, aliasColor, Props, Theme } from '@xstyled/styled-components'
 
-export function primaryColor(color) {
+export function primaryColor(color: string) {
   return aliasColor('primary', color)
 }
 
@@ -53,7 +53,7 @@ export const theme = {
     control: th.borderWidth('base'),
   },
   shadows: {
-    focus: (p) => `0 0 0 ${th.px(2)(p)} ${th.color('primary-a500')(p)}`,
+    focus: (p: Props<Theme>) => `0 0 0 ${th.px(2)(p)} ${th.color('primary-a500')(p)}`,
     'control-focus': th.shadow('focus'),
   },
   sizes: {
@@ -80,14 +80,14 @@ export const theme = {
     ...aliasColor('primary', 'cyan'),
 
     primary: th.color('primary-500'),
-    'primary-a500': (p) => transparentize(0.5, th.color('primary-500')(p)),
+    'primary-a500': (p: Props<Theme>) => transparentize(0.5, th.color('primary-500')(p) as string),
 
     background: th.color('white'),
     'background-light': th.color('gray-100'),
     'background-primary': th.color('primary-100'),
     'background-mark': th.color('yellow-200'),
-    'background-light-a50': (p) =>
-      transparentize(0.05, th.color('background-light')(p)),
+    'background-light-a50': (p: Props<Theme>) =>
+      transparentize(0.05, th.color('background-light')(p) as string),
     'on-background': th.color('black'),
     'on-background-light': th.color('gray-700'),
     'on-background-primary': th.color('primary-700'),
@@ -122,8 +122,8 @@ export const theme = {
         'background-light': th.color('gray-800'),
         'background-primary': th.color('primary-900'),
         'background-mark': th.color('yellow-500'),
-        'background-light-a50': (p) =>
-          transparentize(0.05, th.color('background-light')(p)),
+        'background-light-a50': (p: Props<Theme>) =>
+          transparentize(0.05, th.color('background-light')(p) as string),
         'on-background': th.color('white'),
         'on-background-light': th.color('gray-300'),
         'on-background-primary': th.color('primary-300'),

@@ -54,7 +54,7 @@ const Kbd = styled.kbd`
 export function DocSearch({ apiKey, indexName, appId }) {
   const searchButtonRef = React.useRef(null)
   const [isOpen, setIsOpen] = React.useState(false)
-  const [initialQuery, setInitialQuery] = React.useState(null)
+  const [initialQuery, setInitialQuery] = React.useState('')
 
   const onOpen = React.useCallback(() => {
     setIsOpen(true)
