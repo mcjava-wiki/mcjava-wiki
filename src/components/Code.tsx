@@ -117,7 +117,7 @@ const getLanguageMarker = (className: string) => {
           className={`lang-marker ${className}`} 
           style={{ background: langStyles[lang].backgroundColor, color: langStyles[lang].textColor }}
         >
-          <Icon style={{ display: 'inline-block', marginTop: -3, fontSize: 14 }}/>&nbsp;{langStyles[lang].shortName}
+          <Icon style={{ display: 'inline-block', marginTop: -2.5, fontSize: 14 }}/>&nbsp;{langStyles[lang].shortName}
         </LanguageMarker>
       )
   }
