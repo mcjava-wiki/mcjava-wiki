@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 // eslint-disable-next-line import/no-unresolved
 import { useLocation } from '@reach/router'
 import styled, { th } from '@xstyled/styled-components'
@@ -14,22 +14,24 @@ function getHeaderAnchors() {
   )
 }
 
-function getHeaderDataFromAnchor(el) {
+function getHeaderDataFromAnchor(el: Element): { url: string; text: string; depth: number } {
+  const parentElement = el.parentElement;
+  if (!parentElement) return { url: '', text: '', depth: 0 };
   return {
-    url: el.getAttribute('href'),
-    text: el.parentElement?.innerText,
-    depth: Number(el.parentElement?.nodeName.replace('H', '')),
+    url: el.getAttribute('href') || '',
+    text: parentElement.innerText || '',
+    depth: Number(parentElement.nodeName.replace('H', '')) || 0,
   }
 }
 
-function getAnchorHeaderIdentifier(el) {
+function getAnchorHeaderIdentifier(el: Element): string | undefined {
   return el?.parentElement?.id
 }
 
-export function useTocHighlight(ref) {
+export function useTocHighlight(ref: React.RefObject<HTMLDivElement>): any[] {
   const { pathname } = useLocation()
   const [lastActiveLink, setLastActiveLink] = React.useState<HTMLAnchorElement | undefined>(undefined)
-  const [headings, setHeadings] = React.useState([])
+  const [headings, setHeadings] = React.useState<{ url: string; depth: number; text: string }[]>([])
 
   React.useEffect(() => {
     setHeadings(getHeaderAnchors().map(getHeaderDataFromAnchor))
@@ -65,7 +67,7 @@ export function useTocHighlight(ref) {
         let index = 0
         let itemHighlighted = false
 
-        links = ref.current ? ref.current.querySelectorAll('a') : []
+        links = Array.from(ref.current?.querySelectorAll('a') || [])
 
         while (index < links.length && !itemHighlighted) {
           const link = links[index] as HTMLAnchorElement

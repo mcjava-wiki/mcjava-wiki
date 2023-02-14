@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import styled, { x, useColorMode, down, css } from '@xstyled/styled-components'
 import { ScreenContainer } from './ScreenContainer'
@@ -76,21 +76,21 @@ const NavSkipLink = styled.a`
   }
 `
 
-function useLogo(logos) {
+function useLogo(logos: readonly { readonly name: string; readonly publicURL: string | null }[]) {
   const [mode] = useColorMode()
   switch (mode) {
     case 'dark':
       return (
         logos.find((logo) => logo.name === 'logo-nav-dark') ||
         logos.find((logo) => logo.name === 'logo-nav') ||
-        null
+        ''
       )
     case 'light':
     default:
       return (
         logos.find((logo) => logo.name === 'logo-nav-light') ||
         logos.find((logo) => logo.name === 'logo-nav') ||
-        null
+        ''
       )
   }
 }
@@ -98,6 +98,10 @@ function useLogo(logos) {
 export function AppHeader() {
   const data: Queries.AppHeaderQuery = useStaticQuery(AppHeaderQuery)
   const logo = useLogo(data.logos.nodes)
+
+  if (!data.site || !data.site.siteMetadata) return null;
+  const docSearch = data.site.siteMetadata.docSearch;
+  if (!docSearch) return null;
 
   return (
     <OuterHeader>
@@ -120,7 +124,7 @@ export function AppHeader() {
                   col="auto"
                   px={2}
                   height={32}
-                  src={logo.publicURL}
+                  src={String(logo.publicURL)}
                   alt={data?.site?.siteMetadata?.title}
                 />
               ) : (
@@ -139,7 +143,11 @@ export function AppHeader() {
           </x.div>
           {data?.site?.siteMetadata?.docSearch ? (
             <x.div col="auto" px={2} display={{ xs: 'none', md: 'block' }}>
-              <DocSearch {...data.site.siteMetadata.docSearch} />
+              <DocSearch 
+                apiKey={docSearch.apiKey}
+                indexName={docSearch.indexName}
+                appId={docSearch.appId || ''}
+              />
             </x.div>
           ) : null}
           <x.div col="auto" px={2}>

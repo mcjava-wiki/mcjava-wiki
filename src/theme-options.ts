@@ -1,4 +1,4 @@
-function getSiteUrl(themeOptions) {
+function getSiteUrl(themeOptions: { siteUrl: any }) {
   if (process.env.NETLIFY !== 'true')
     return themeOptions.siteUrl || 'http://localhost:8000/'
   if (process.env.CONTEXT === 'production') return process.env.URL

@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { useStaticQuery, graphql, Link, withPrefix } from 'gatsby'
 import styled from '@xstyled/styled-components'
 // eslint-disable-next-line import/no-unresolved
@@ -29,7 +29,18 @@ const SideNavQuery = graphql`
   }
 `
 
-const createOrFindGroup = (name, groups) => {
+interface Node {
+  id: string;
+  fields: {
+    title: string;
+    pageType: string;
+    section: string;
+    order: number;
+    slug: string;
+  };
+}
+
+const createOrFindGroup = (name: string, groups: { name: string; nodes: Node[] }[]) => {
   const existingGroup = groups.find((group) => group.name === name)
   if (existingGroup) return existingGroup
 
@@ -40,7 +51,7 @@ const createOrFindGroup = (name, groups) => {
 
 const DEFAULT_ORDER_VALUE = -9999
 
-const sortNodes = (a, b) => {
+const sortNodes = (a: { fields: { order: number; title: string } }, b: { fields: { order: number; title: any } }) => {
   const diff =
     a.fields.order !== DEFAULT_ORDER_VALUE &&
     b.fields.order !== DEFAULT_ORDER_VALUE
@@ -53,8 +64,8 @@ const sortNodes = (a, b) => {
   return diff === 0 ? 0 : diff > 0 ? 1 : -1
 }
 
-const groupNodes = (nodes: any[]) =>
-  nodes.reduce((groups, node) => {
+const groupNodes = (nodes: Node[]) =>
+  nodes.reduce((groups, node: Node) => {
     if (!node.fields.title) return groups
     const group = createOrFindGroup(node.fields.section || 'Docs', groups)
     group.nodes.push(node)
@@ -128,7 +139,7 @@ const sortGroupsWithConfig = (section: readonly string[] | null) => (a: { name: 
 export function useSideNavState() {
   const data: Queries.SideNavQueryQuery = useStaticQuery(SideNavQuery)
   return React.useMemo(() => {
-    const navGroups = groupNodes(data.allMdx.edges.map((edge) => edge.node))
+    const navGroups = groupNodes(data.allMdx.edges.map((edge) => edge.node as Node))
     if ( !data.site ) return;
     const siteMetadata = data.site.siteMetadata;
     if (!siteMetadata) return;
@@ -137,11 +148,11 @@ export function useSideNavState() {
   }, [data])
 }
 
-export function useSideNavPrevNext({ navGroups }) {
+export function useSideNavPrevNext({ navGroups }: { navGroups: { name: string; nodes: Node[] }[] }) {
   const { pathname } = useLocation()
-  const nodes = navGroups.flatMap((group: { nodes: any }) => group.nodes)
+  const nodes = navGroups.flatMap((group: { nodes: Node[] }) => group.nodes)
   const nodeIndex = nodes.findIndex(
-    (node: { fields: { slug: any } }) => withPrefix(`${node.fields.slug}/`) === pathname,
+    (node: Node) => withPrefix(`${node.fields.slug}/`) === pathname,
   )
   return {
     prev: nodeIndex > -1 ? nodes[nodeIndex - 1] : null,
@@ -149,7 +160,7 @@ export function useSideNavPrevNext({ navGroups }) {
   }
 }
 
-export function SideNav({ navGroups }) {
+export function SideNav({ navGroups }: { navGroups: { name: string; nodes: Node[] }[] }) {
   return (
     <Nav>
       {navGroups.map((navGroup, index) => (

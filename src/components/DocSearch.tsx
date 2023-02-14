@@ -51,7 +51,7 @@ const Kbd = styled.kbd`
   min-width: 1.5em;
 `
 
-export function DocSearch({ apiKey, indexName, appId }) {
+export function DocSearch({ apiKey, indexName, appId }: { apiKey: string; indexName: string; appId: string }) {
   const searchButtonRef = React.useRef(null)
   const [isOpen, setIsOpen] = React.useState(false)
   const [initialQuery, setInitialQuery] = React.useState('')
@@ -65,7 +65,7 @@ export function DocSearch({ apiKey, indexName, appId }) {
   }, [setIsOpen])
 
   const onInput = React.useCallback(
-    (event) => {
+    (event: { key: React.SetStateAction<string> }) => {
       setIsOpen(true)
       setInitialQuery(event.key)
     },

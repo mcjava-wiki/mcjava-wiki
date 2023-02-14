@@ -8,9 +8,13 @@
     "allowJs": true,
     "outDir": "./dist",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "traceResolution": true,
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "exclude": ["node_modules", "public", ".cache"]
+  "exclude": ["node_modules/", "public", ".cache"],
+  "include": ["src/**/*", "src/*"]
 }

@@ -10,6 +10,6 @@ export const GlobalStyle = createGlobalStyle`
   ${th('global')}
 `
 
-export function ThemeProvider({ children }) {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return <SCThemeProvider theme={theme}>{children}</SCThemeProvider>
 }

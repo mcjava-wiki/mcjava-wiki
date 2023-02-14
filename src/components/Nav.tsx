@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Link } from 'gatsby'
 import styled, { x, th, down, css } from '@xstyled/styled-components'
 

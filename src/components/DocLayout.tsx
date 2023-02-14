@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import styled, { x, css, up, down, th, useUp } from '@xstyled/styled-components'
 import { useDialogState, Dialog, DialogDisclosure } from 'ariakit/dialog'
@@ -143,7 +143,7 @@ const DocSearchQuery = graphql`
   }
 `
 
-function MobileSidebar({ children }) {
+function MobileSidebar({ children }: { children: React.ReactNode }) {
   const dialog = useDialogState({ animated: true })
   const data: Queries.DocSearchQuery = useStaticQuery(DocSearchQuery)
   if (!data.site || !data.site.siteMetadata) return null;
@@ -156,7 +156,7 @@ function MobileSidebar({ children }) {
         <DocSearch 
           apiKey={docSearch.apiKey}
           indexName={docSearch.indexName}
-          appId={docSearch.appId}
+          appId={docSearch.appId || ''}
         />
         </div>
         {children}
@@ -173,7 +173,6 @@ function MobileSidebar({ children }) {
 function PrevNextLinks({ editLink, ...props }: { navGroups: any; } & { [x: string]: any; }) {
   const { prev, next } = useSideNavPrevNext(props)
   if (!prev && !next) return null
-  console.log('PrevNextLinks editLink', editLink)
   return (
     <SiblingNav>
       {prev && (
@@ -203,11 +202,15 @@ function PrevNextLinks({ editLink, ...props }: { navGroups: any; } & { [x: strin
   )
 }
 
-export function DocLayout({ children, tableOfContents, editLink, contributors, ...props }) {
+export function DocLayout(
+  { children, tableOfContents, editLink, contributors, title, ...props }:
+  { children: React.ReactNode, tableOfContents: any, editLink: string, contributors: any, title:string, props?: any }
+  
+  ) {
   const upMd = useUp('md')
   const sideNav: any = useSideNavState()
   return (
-    <PageLayout title={undefined} {...props}>
+    <PageLayout title={title} {...props}>
       <ScreenContainer px={0}>
         <Container>
           <SidebarSticky>

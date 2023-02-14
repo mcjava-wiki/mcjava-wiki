@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { x, useColorMode } from '@xstyled/styled-components'
 import { RiMoonClearLine, RiSunLine } from 'react-icons/ri'
 

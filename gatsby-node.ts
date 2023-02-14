@@ -1,6 +1,6 @@
 import { CreateNodeArgs, GatsbyNode, PageProps  } from "gatsby";
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { createFilePath } from 'gatsby-source-filesystem';
 const { getSiteUrl } = require('./src/theme-options.ts')
 import { tlds, sites, routes } from './src/util/constants';
@@ -218,7 +218,6 @@ export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions,
         edges {
           node {
             id
-            frontmatter
             fields {
               slug
               pageType

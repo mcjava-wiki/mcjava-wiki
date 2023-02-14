@@ -2784,10 +2784,7 @@ type SideNavQueryQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ re
 type CreatePagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-// note still needs to gen proper type but low memory on codespaces machine
-type CreatePagesQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: {
-  frontmatter: any; readonly id: string, readonly fields: { readonly slug: string | null, readonly pageType: string | null, readonly redirect: string | null } | null, readonly parent: { readonly sourceInstanceName: string } | {} | null, readonly internal: { readonly contentFilePath: string | null } 
-} }> } };
+type CreatePagesQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly fields: { readonly slug: string | null, readonly pageType: string | null, readonly redirect: string | null } | null, readonly parent: { readonly sourceInstanceName: string } | {} | null, readonly internal: { readonly contentFilePath: string | null } } }> } };
 
 
 }

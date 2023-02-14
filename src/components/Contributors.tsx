@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from '@xstyled/styled-components'
 import { RiUserAddFill } from 'react-icons/ri'
 import { tlds, sites } from '../util/constants'

@@ -3,7 +3,7 @@ import { Button as AriakitButton } from 'ariakit/button'
 import styled, { css } from '@xstyled/styled-components'
 
 const variant =
-  ({ background, backgroundHover, on }) =>
+  ({ background, backgroundHover, on }: {background: string, backgroundHover: string, on: string}) =>
   () => {
     return css`
       background-color: ${background};

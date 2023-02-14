@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import { RiGithubFill, RiDiscordFill } from 'react-icons/ri'
 import { Nav, NavList, NavListItem, NavLink } from './Nav'
