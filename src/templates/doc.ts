@@ -17,7 +17,7 @@ export const pageQuery = graphql`
   }
 `
 
-function DocTemplate({ children }) {
+function DocTemplate({ children }: { children: React.ReactNode }) {
   return children
 }
 

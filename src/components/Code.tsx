@@ -117,7 +117,7 @@ const getLanguageMarker = (className: string) => {
           className={`lang-marker ${className}`} 
           style={{ background: langStyles[lang].backgroundColor, color: langStyles[lang].textColor }}
         >
-          <Icon style={{ display: 'inline-block', marginTop: -3, fontSize: 14 }}/>&nbsp;{langStyles[lang].shortName}
+          <Icon style={{ display: 'inline-block', marginTop: -2.5, fontSize: 14 }}/>&nbsp;{langStyles[lang].shortName}
         </LanguageMarker>
       )
   }
@@ -164,11 +164,11 @@ const LivePreview = styled(BaseLivePreview)`
   )}
 `
 
-const globalModules = {
+const globalModules: { [key: string]: string } = {
   react: 'React',
 }
 
-export function LiveConfig({ modules }) {
+export function LiveConfig({ modules }: { modules: Record<string, any> }) {
   Object.assign(globalModules, modules)
   return null
 }
@@ -268,8 +268,16 @@ const CopyCode = styled.button`
   }
 `
 
-export function Code({ children, lang = 'markup', meta }) {
+export function Code({ children, lang = 'markup', meta }: {
+  children: React.ReactNode;
+  lang?: string;
+  meta?: any;
+}) {
   const prismTheme = usePrismTheme() as PrismTheme;
+
+  if (typeof children !== 'string') {
+    throw new Error(`Expected children to be a string, but received a ${typeof children}.`)
+  }
 
   if (/live/.test(meta)) {
     return (

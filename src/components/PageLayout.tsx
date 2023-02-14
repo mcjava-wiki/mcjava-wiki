@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import styled from '@xstyled/styled-components'
 import { AppHeader } from './AppHeader'
 import { Head } from './Head'
@@ -22,7 +22,7 @@ const Container = styled.div`
   min-height: 100vh;
 `
 
-export function PageLayout({ children, title }) {
+export function PageLayout({ children, title }: { children: React.ReactNode; title: string }) {
   return (
     <>
       <Head title={title} />

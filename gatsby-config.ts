@@ -1,4 +1,5 @@
-import path from 'path';
+import * as path from 'path';
+import type { GatsbyConfig } from "gatsby";
 
 const visit = require('unist-util-visit')
 
@@ -13,9 +14,11 @@ function rehypeMetaAsAttributes() {
   }
 }
 
-module.exports = {
+const config: GatsbyConfig = {
   pathPrefix: `${process.env.PATH_PREFIX}`,
-  graphqlTypegen: true,
+  graphqlTypegen: {
+    typesOutputPath: './src/types/gatsby-types.d.ts'
+  },
   siteMetadata: {
     title: "mcjava-wiki",
     githubRepository: 'mcjava-wiki/mcjava-wiki',
@@ -168,3 +171,5 @@ module.exports = {
     },
   ],
 }
+
+export default config;

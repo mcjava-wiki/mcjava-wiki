@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import { RiGithubFill, RiDiscordFill } from 'react-icons/ri'
 import { Nav, NavList, NavListItem, NavLink } from './Nav'
@@ -17,7 +17,7 @@ const AppNavQuery = graphql`
 `
 
 export function AppNav() {
-  const data = useStaticQuery(AppNavQuery)
+  const data: Queries.AppNavQuery = useStaticQuery(AppNavQuery)
   return (
     <Nav>
       <NavList>
@@ -27,7 +27,7 @@ export function AppNav() {
         <NavListItem>
             <NavLink
               as="a"
-              href={`https://${sites.GITHUB}.${tlds.COM}/${data.site.siteMetadata.githubRepository}`}
+              href={`https://${sites.GITHUB}.${tlds.COM}/${data?.site?.siteMetadata?.githubRepository}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -37,7 +37,7 @@ export function AppNav() {
         <NavListItem>
             <NavLink
               as="a"
-              href={`https://${sites.DISCORD}.${tlds.GG}/${data.site.siteMetadata.discordInviteCode}`}
+              href={`https://${sites.DISCORD}.${tlds.GG}/${data?.site?.siteMetadata?.discordInviteCode}`}
               target="_blank"
               rel="noopener noreferrer"
             >

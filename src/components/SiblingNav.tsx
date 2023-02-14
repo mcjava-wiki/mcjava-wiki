@@ -1,4 +1,4 @@
-import React, { Ref } from 'react'
+import * as React from 'react'
 import { Link } from 'gatsby'
 import styled from '@xstyled/styled-components'
 
@@ -29,10 +29,10 @@ interface SiblingNavLinkProps {
 }
 
 export const SiblingNavLink = React.forwardRef(
-  ({ type, children, to, ...props }: SiblingNavLinkProps, ref: any) => {
+  ({ type, children, to, ...props }: SiblingNavLinkProps, ref: React.Ref<HTMLAnchorElement>) => {
     return (
       <InnerSiblingNavLink
-        ref={ref}
+        innerRef={ref}
         as={Link}
         to={to}
         data-type={type}

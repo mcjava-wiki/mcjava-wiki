@@ -3,7 +3,7 @@ import { ColorModeProvider, Preflight } from '@xstyled/styled-components'
 import { MDXProvider } from './MDX'
 import { GlobalStyle, ThemeProvider } from './Theme'
 
-export function RootWrapper({ children }) {
+export function RootWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <ColorModeProvider>

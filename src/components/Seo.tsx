@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import Helmet from 'react-helmet'
 import { graphql, useStaticQuery } from 'gatsby'
 
@@ -33,15 +33,15 @@ const SEOQuery = graphql`
   }
 `
 
-export function Seo({ title }) {
-  const data = useStaticQuery(SEOQuery)
-  const metaDescription = data.site.siteMetadata.description
-  const metaTitle = title || data.site.siteMetadata.title
-  const url = data.site.siteMetadata.siteUrl
+export function Seo({ title }: { title: string }) {
+  const data: Queries.SEOQueryQuery = useStaticQuery(SEOQuery)
+  const metaDescription = String(data?.site?.siteMetadata?.description || '')
+  const metaTitle = String(title || data?.site?.siteMetadata?.title || '')
+  const url = String(data?.site?.siteMetadata?.siteUrl || '')
   const socialImage = data.defaultSocialImage || data.socialImage
   const image = socialImage
-    ? url + socialImage.childImageSharp.gatsbyImageData.images.fallback.src
-    : null
+  ? String((url || '') + socialImage?.childImageSharp?.gatsbyImageData?.images?.fallback?.src || '')
+  : ''
   return (
     <Helmet
       htmlAttributes={{ lang: 'en' }}
@@ -49,25 +49,25 @@ export function Seo({ title }) {
       meta={[
         {
           name: 'description',
-          content: metaDescription,
+          content: typeof metaDescription === 'string' ? metaDescription : '',
         },
         {
           property: 'og:title',
-          content: metaTitle,
+          content: typeof metaTitle === 'string' ? metaTitle : '',
         },
         {
           property: 'og:url',
-          content: url,
+          content: typeof url === 'string' ? url : '',
         },
         {
           property: 'og:description',
-          content: metaDescription,
+          content: typeof metaDescription === 'string' ? metaDescription : '',
         },
         {
           property: 'og:type',
           content: 'website',
         },
-        ...(image
+        ...(typeof image === 'string'
           ? [
               {
                 property: 'og:image',
@@ -83,18 +83,18 @@ export function Seo({ title }) {
               },
             ]
           : []),
-
+  
         {
           name: 'twitter:creator',
-          content: data.site.siteMetadata.author,
+          content: typeof data?.site?.siteMetadata?.author === 'string' ? data?.site?.siteMetadata?.author : '',
         },
         {
           name: 'twitter:title',
-          content: metaTitle,
+          content: typeof metaTitle === 'string' ? metaTitle : '',
         },
         {
           name: 'twitter:description',
-          content: metaDescription,
+          content: typeof metaDescription === 'string' ? metaDescription : '',
         },
       ]}
     />

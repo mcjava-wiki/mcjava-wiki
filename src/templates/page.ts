@@ -11,7 +11,7 @@ export const pageQuery = graphql`
   }
 `
 
-function PageTemplate({ children }) {
+function PageTemplate({ children }: { children: React.ReactNode }) {
   return children
 }
 

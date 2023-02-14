@@ -3,7 +3,7 @@ import { Button as AriakitButton } from 'ariakit/button'
 import styled, { css } from '@xstyled/styled-components'
 
 const variant =
-  ({ background, backgroundHover, on }) =>
+  ({ background, backgroundHover, on }: {background: string, backgroundHover: string, on: string}) =>
   () => {
     return css`
       background-color: ${background};
@@ -71,7 +71,7 @@ interface ButtonProps {
 }
 
 export const Button = React.forwardRef(
-  ({ variant = 'primary', children, ...props }: ButtonProps, ref: any) => {
+  ({ variant = 'primary', children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
     return (
       <AriakitButton ref={ref} data-variant={variant}>
         {(buttonProps) => (

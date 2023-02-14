@@ -7,6 +7,23 @@ export function PageWrapper({
   props: {
     data: { mdx },
   },
+}: {
+  children: React.ReactNode;
+  props: {
+    data: {
+      mdx: {
+        fields: {
+          pageType: string;
+          title: string;
+          editLink: string;
+          contributors: unknown;
+        };
+        tableOfContents: unknown;
+        editLink: string;
+        contributors: unknown;
+      };
+    };
+  };
 }) {
   if (!mdx?.fields?.pageType) return children
   switch (mdx.fields.pageType) {

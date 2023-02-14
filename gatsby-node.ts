@@ -1,14 +1,14 @@
-import { CreateNodeArgs } from "gatsby";
-
-import fs from 'fs';
-import path from 'path';
+import { CreateNodeArgs, GatsbyNode, PageProps  } from "gatsby";
+import * as fs from 'fs';
+import * as path from 'path';
 import { createFilePath } from 'gatsby-source-filesystem';
 const { getSiteUrl } = require('./src/theme-options.ts')
 import { tlds, sites, routes } from './src/util/constants';
-const config = require('./gatsby-config.ts')
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 
-function createSchemaCustomization({ actions }) {
+import config from './gatsby-config';
+
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({ actions }) => {
   const { createTypes } = actions
   const typeDefs = `
     type NavItem {
@@ -52,7 +52,7 @@ function createDirectoryIfNotExists({ reporter }, pathname) {
   }
 }
 
-async function onPreBootstrap(options) {
+export const onPreBootstrap: GatsbyNode["onPreBootstrap"] = async (options) => {
   // Create all required directories
   createDirectoryIfNotExists(options, 'pages')
   createDirectoryIfNotExists(options, 'pages/docs')
@@ -77,18 +77,20 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
   url.pathname = slug
 
   function getGithubLink(tld: string, route: string) {
+    const siteMetadata = config.siteMetadata;
+    if (!siteMetadata) return '';
     const {
       baseDirectory = path.resolve(__dirname, './'),
-      githubRepositoryURL = `https://${sites.GITHUB}.${tld}/${config.siteMetadata.githubRepository}`,
-      githubDefaultBranch = config.siteMetadata.githubDefaultBranch,
+      githubRepositoryURL = `https://${sites.GITHUB}.${tld}/${siteMetadata.githubRepository}`,
+      githubDefaultBranch = siteMetadata.githubDefaultBranch,
     } = options
-    const repositoryURL = githubRepositoryURL
-    if (!baseDirectory || !repositoryURL) return ''
+    const repositoryURL = githubRepositoryURL;
+    if (!baseDirectory || !repositoryURL) return '';
     const relativePath = node.internal.contentFilePath.replace(
       baseDirectory,
       '',
     )
-    return `${repositoryURL}${route}${githubDefaultBranch}${relativePath}`
+    return `${repositoryURL}${route}${githubDefaultBranch}${relativePath}`;
   }
 
   const getData = async (url: URL | RequestInfo) => {
@@ -103,7 +105,7 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
 
   const getContributors = async () => {
     const contributorsHtml = await getData(getGithubLink(tlds.COM, routes.CONTRIBUTORS_LIST));
-    const $ = cheerio.load(contributorsHtml);
+    const $ = load(contributorsHtml);
     
     const contributors: Contributor[] = [];
     $(".avatar").each((_i: any, element: any) => {
@@ -198,16 +200,19 @@ async function onCreateMdxNode({ node, getNode, actions }, options) {
 
 }
 
-async function onCreateNode(...args: [CreateNodeArgs]) {
+export const onCreateNode: GatsbyNode["onCreateNode"] = async (...args: [CreateNodeArgs]) => {
   if (args[0].node.internal.type === 'Mdx') {
     await onCreateMdxNode(...args, {})
   }
 }
 
-async function createPages({ graphql, actions, reporter }) {
-  const { createPage, createRedirect } = actions
+export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter }) => {
+  const { createPage, createRedirect } = actions;
 
-  const { data, errors } = await graphql(`
+  const allMdx: {
+    errors?: any;
+    data?: Queries.CreatePagesQuery;
+  } = await graphql(`
     query CreatePages {
       allMdx {
         edges {
@@ -232,14 +237,20 @@ async function createPages({ graphql, actions, reporter }) {
     }
   `)
 
-  if (errors) {
+  if (allMdx.errors) {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
-    console.log(errors)
+    console.log(allMdx.errors)
     return
   }
 
-  const filteredEdges = data.allMdx.edges.filter((edge: { node: { parent: { sourceInstanceName: string; }; fields: { slug: any; }; }; }) => {
-    if (edge.node.parent.sourceInstanceName === 'default-page') {
+  const data = allMdx.data;
+  if (!data) return;
+  
+  const filteredEdges = data.allMdx.edges.filter((edge: Queries.CreatePagesQuery["allMdx"]["edges"][0]) => {
+    const parent = edge.node.parent;
+    if (!parent) return true;
+    if (typeof parent === "object" && "sourceInstanceName" in parent && parent.sourceInstanceName === 'default-page') {
+      if (!edge.node.fields) return true;
       const { slug } = edge.node.fields
       const hasCustom404 = data.allMdx.edges.find(
         (_edge: { node: any; }) => edge !== _edge && _edge.node.fields.slug === slug,
@@ -251,6 +262,7 @@ async function createPages({ graphql, actions, reporter }) {
 
   // Create pages
   filteredEdges.forEach(({ node }) => {
+    if (!node.fields || !node.fields.slug) return;
     if (node.fields.redirect) {
       createRedirect({
         fromPath: node.fields.slug,
@@ -275,7 +287,7 @@ async function createPages({ graphql, actions, reporter }) {
   })
 }
 
-const pluginOptionsSchema = (/** @type {{ Joi: import('joi') }} */ { Joi }) => {
+export const pluginOptionsSchema: GatsbyNode["pluginOptionsSchema"] = (/** @type {{ Joi: import('joi') }} */ { Joi }) => {
   return Joi.object({
     // Validate that the anonymize option is defined by the user and is a boolean
     name: Joi.string().required(),
